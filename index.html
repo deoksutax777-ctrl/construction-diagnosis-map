@@ -1,0 +1,1715 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>건설업체 기업진단지침 · 재무상태표 지도 v7</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --navy:#081b4b; --brand:#0a2f7d; --brand2:#1650c0;
+  --bg:#eef1f6; --surface:#fff; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
+  --line:#dde3ec; --line2:#eceff5;
+  --real:#1d4ed8; --real-bg:#e8efff; --real-bd:#bcd0fb;
+  --dead:#c42b2b; --dead-bg:#ffecea; --dead-bd:#f5bdb8;
+  --biz:#0b7a70;  --biz-bg:#e3f5f2;  --biz-bd:#9fd8d0;
+  --cut:#6d3fc0;  --cut-bg:#f0eafc;  --cut-bd:#cfc0f2;
+  --none:#64748b; --none-bg:#f1f3f6; --none-bd:#dde1e8;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 8px 24px rgba(15,23,42,.07);
+  --tb:60px; --dw:30rem;
+}
+*{box-sizing:border-box}
+html{font-size:16px;color-scheme:light;scroll-padding-top:5rem}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 1rem/1.62 "Pretendard Variable","Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,h4,p,ul{margin:0}
+.wrap{max-width:1560px;margin:0 auto;padding:0 2rem}
+:focus-visible{outline:3px solid #7aa2ff;outline-offset:2px}
+
+/* 분류 색 변수 */
+.t-real{--tc:var(--real);--tbg:var(--real-bg);--tbd:var(--real-bd)}
+.t-dead{--tc:var(--dead);--tbg:var(--dead-bg);--tbd:var(--dead-bd)}
+.t-biz {--tc:var(--biz); --tbg:var(--biz-bg); --tbd:var(--biz-bd)}
+.t-cut {--tc:var(--cut); --tbg:var(--cut-bg); --tbd:var(--cut-bd)}
+.t-none{--tc:var(--none);--tbg:var(--none-bg);--tbd:var(--none-bd)}
+.tag{display:inline-flex;align-items:center;font-size:.7rem;font-weight:800;border-radius:.4rem;padding:.08rem .5rem;line-height:1.4;border:1px solid transparent;white-space:nowrap;flex:none}
+.tag.base{background:var(--tc);color:#fff}
+.tag.alt{background:#fff;border-color:var(--tbd);color:var(--tc)}
+
+/* ───────── 상단바 ───────── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.tb{display:flex;align-items:center;gap:1rem;height:60px}
+.brand{font-weight:800;font-size:.95rem;letter-spacing:-.01em;color:var(--brand);white-space:nowrap;display:flex;align-items:center;gap:.55rem}
+.brand::before{content:"";width:.8rem;height:.8rem;border-radius:.2rem;background:linear-gradient(135deg,var(--real) 0 50%,var(--dead) 50%);box-shadow:.55rem .3rem 0 -.1rem var(--biz)}
+.brand span{margin-left:.5rem}
+.search{position:relative;flex:1 1 18rem;max-width:30rem;margin-left:auto;display:flex;align-items:center}
+.search svg{position:absolute;left:.8rem;color:var(--muted);pointer-events:none}
+.search input{width:100%;height:2.5rem;border:1px solid var(--line);border-radius:999px;padding:0 3rem 0 2.4rem;font:inherit;font-size:.9rem;background:#f6f8fb;outline:none;transition:border-color .12s,box-shadow .12s,background .12s}
+.search input:focus{background:#fff;border-color:var(--brand);box-shadow:0 0 0 3px rgba(10,47,125,.13)}
+.search kbd{position:absolute;right:.7rem;font:700 .7rem/1 inherit;color:var(--muted);border:1px solid var(--line);background:#fff;border-radius:.3rem;padding:.22rem .38rem;pointer-events:none}
+.search input:focus ~ kbd,.search input:not(:placeholder-shown) ~ kbd{display:none}
+.tools{display:flex;align-items:center;gap:.5rem}
+.ibtn{height:2.5rem;min-width:2.5rem;padding:0 .8rem;border:1px solid var(--line);background:#fff;border-radius:.7rem;font-size:.85rem;font-weight:700;color:var(--ink2);transition:.12s}
+.ibtn:hover:not(:disabled){border-color:var(--brand);color:var(--brand);background:#f5f8ff}
+.ibtn:disabled{opacity:.35;cursor:default}
+.fsz{display:inline-flex;gap:.3rem}
+.fsz .s{font-size:.8rem}.fsz .l{font-size:1.1rem}
+
+/* ───────── 히어로 + 산식 ───────── */
+.page{transition:margin-right .22s ease}
+.hero{background:radial-gradient(1200px 400px at 85% -20%,#2a5fd6 0%,transparent 60%),linear-gradient(135deg,var(--navy),var(--brand));color:#fff;padding:2.1rem 0 6.2rem}
+.eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.16em;color:#9db6ee;margin-bottom:.4rem}
+.hero h1{font-size:2.15rem;font-weight:800;letter-spacing:-.03em;line-height:1.25}
+.lead{margin-top:.6rem;font-size:1rem;color:#cfdbf7;max-width:44rem}
+.eqrow{margin-top:-4.6rem;display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:1rem;position:relative}
+.eqc{background:#fff;border:1px solid var(--line);border-radius:1.1rem;box-shadow:var(--shadow);padding:1.1rem 1.25rem 1.15rem}
+.eqc h2{font-size:.76rem;font-weight:800;letter-spacing:.07em;color:var(--muted);margin-bottom:.8rem}
+.eqline{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .5rem}
+.ob{display:inline-flex;align-items:center;gap:.4rem;border-radius:.65rem;padding:.4rem .7rem;font-weight:800;font-size:.9rem;line-height:1.3;border:1px solid var(--tbd);background:var(--tbg);color:var(--tc)}
+.ob .r{display:inline-flex;align-items:center;justify-content:center;min-width:1.4rem;height:1.4rem;border-radius:50%;background:var(--tc);color:#fff;font-size:.72rem}
+.ob.res{background:var(--brand);border-color:var(--brand);color:#fff}
+.ob.res .r{background:#fff;color:var(--brand)}
+.op{font-weight:800;color:var(--muted);font-size:1.1rem}
+.grp{display:inline-flex;align-items:center;gap:.5rem}
+.eqnote{margin-top:.75rem;font-size:.84rem;color:var(--ink2);line-height:1.6}
+.eqnote b{color:var(--brand)}
+.verd{display:grid;gap:.4rem;margin-top:.8rem}
+.vd{display:flex;align-items:center;justify-content:space-between;gap:.7rem;border-radius:.65rem;padding:.4rem .75rem;border:1px solid var(--tbd);background:var(--tbg)}
+.vd span{font-size:.85rem;font-weight:600;color:var(--ink2)}
+.vd b{font-size:.88rem;font-weight:800;color:var(--tc);white-space:nowrap}
+.basis{margin-top:.9rem;font-size:.82rem;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:.8rem;padding:.55rem .9rem}
+.basis b{color:var(--ink2)}
+
+/* ───────── 분류 카드(범례 + 필터) ───────── */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1.4rem}
+.cat{position:relative;text-align:left;border:1px solid var(--line);background:#fff;border-radius:1rem;padding:.85rem 1rem .85rem 1.2rem;box-shadow:var(--shadow);transition:transform .12s,border-color .12s,background .12s;overflow:hidden}
+.cat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.4rem;background:var(--tc)}
+.cat:hover{transform:translateY(-2px);border-color:var(--tbd)}
+.cat .ct{display:flex;align-items:baseline;gap:.5rem}
+.cat b{font-size:1.1rem;font-weight:800;color:var(--tc)}
+.cat em{font-style:normal;font-weight:800;font-size:.8rem;color:var(--muted)}
+.cat span{display:block;margin-top:.2rem;font-size:.84rem;color:var(--ink2);line-height:1.45}
+.cat[aria-pressed=true]{background:var(--tbg);border-color:var(--tc);box-shadow:0 0 0 2px var(--tc)}
+.hint{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1.2rem;margin:1.1rem .2rem .8rem;font-size:.86rem;color:var(--muted)}
+.hint b{color:var(--ink2)}
+.hint .st{font-weight:700;color:var(--ink)}
+.hint .reset{border:0;background:none;padding:0;color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px;font-size:.86rem}
+.hint .mini{display:inline-flex;align-items:center;gap:.3rem}
+.dot{width:.7rem;height:.7rem;border-radius:50%;background:#fff;border:2px solid var(--tc);display:inline-block}
+
+/* ───────── 지도 ───────── */
+.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem;align-items:start;position:relative}
+.links{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:6}
+.links path{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-dasharray:6 5;stroke-linecap:round;opacity:.85}
+.links path.halo{stroke:#fff;stroke-width:6;stroke-dasharray:none;opacity:.85}
+.links circle{fill:var(--ink);stroke:#fff;stroke-width:2}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:1.2rem;box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--brand);color:#fff;padding:.85rem 1.2rem}
+.ph h2{font-size:1.1rem;font-weight:800;letter-spacing:-.01em}
+.ph h2 small{font-size:.76rem;font-weight:600;color:#a9bff0;margin-left:.4rem}
+.ph p{font-size:.78rem;color:#c3d3f6}
+.ph .n{font-size:.78rem;font-weight:700;background:rgba(255,255,255,.16);border-radius:999px;padding:.15rem .7rem;white-space:nowrap}
+.gh{display:flex;align-items:center;gap:.5rem;padding:1rem 1.2rem 0;font-size:.82rem;font-weight:800;color:var(--gc,var(--ink2))}
+.gh::before{content:"";width:.6rem;height:.6rem;border-radius:2px;background:var(--gc,var(--brand))}
+.gh small{font-size:.72rem;font-weight:700;color:var(--muted)}
+.group + .group{border-top:1px solid var(--line2);margin-top:.9rem}
+.group.k-dead{--gc:var(--dead)}.group.k-biz{--gc:var(--biz)}.group.k-cut{--gc:var(--cut)}.group.k-plain{--gc:var(--brand)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.8rem,1fr));gap:.45rem;padding:.6rem 1rem .85rem}
+
+.tile{position:relative;display:flex;flex-direction:column;gap:.25rem;min-height:0;text-align:left;padding:.45rem .55rem .45rem;
+  border:1px solid var(--tbd);border-top:5px solid var(--tc);background:var(--tbg);border-radius:.8rem;
+  transition:transform .12s,box-shadow .12s,opacity .15s,filter .15s}
+.tile:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,23,42,.14)}
+.tile .t1{display:flex;align-items:center;gap:.35rem}
+.tile .alts{display:flex;gap:.2rem;margin-left:.1rem}
+.tile .alts .dot{width:.62rem;height:.62rem;border-width:2px}
+.tile .lkm{margin-left:auto;font-size:.72rem;font-weight:800;color:var(--real);background:#fff;border:1px solid var(--real-bd);border-radius:999px;padding:0 .4rem;line-height:1.3}
+.tile .nm{font-size:.88rem;font-weight:800;line-height:1.35;letter-spacing:-.015em;color:var(--ink)}
+.tile .ch{display:flex;flex-wrap:wrap;gap:.25rem}
+.tile .ch span{font-size:.7rem;font-weight:800;color:var(--tc);background:#fff;border-radius:.3rem;padding:0 .4rem;line-height:1.4;border:1px solid var(--tbd)}
+.tile .sm{font-size:.72rem;font-weight:500;color:var(--ink2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body.nosum .tile .sm{display:none}
+.ibtn[aria-pressed=true]{background:var(--real-bg);border-color:var(--real-bd);color:var(--real)}
+.tile .ar{margin-top:auto;font-size:.7rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile.dim{opacity:.18;filter:grayscale(.7)}
+.tile.sel{box-shadow:0 0 0 3px var(--ink),0 8px 18px rgba(15,23,42,.18);transform:translateY(-2px)}
+.tile.pair{outline:3px dashed var(--ink);outline-offset:2px;box-shadow:0 8px 18px rgba(15,23,42,.16)}
+.tile.sel.pair{box-shadow:0 0 0 3px var(--ink)}
+mark{background:#cfe3ff;color:inherit;border-radius:.15rem;padding:0 .08em}
+.empty{padding:2rem;text-align:center;color:var(--muted)}
+
+/* ───────── 상세 패널(Drawer) ───────── */
+.drawer{position:fixed;z-index:45;top:var(--tb);right:0;bottom:0;width:min(var(--dw),100vw);background:#fff;border-left:1px solid var(--line);
+  box-shadow:-14px 0 34px rgba(15,23,42,.13);transform:translateX(104%);transition:transform .24s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;visibility:hidden}
+.drawer.on{transform:none;visibility:visible}
+.dr-head{flex:none;background:var(--tbg);border-top:6px solid var(--tc);border-bottom:1px solid var(--tbd);padding:.7rem 1.2rem 1rem}
+.dr-nav{display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
+.dr-nav .pos{font-size:.76rem;font-weight:700;color:var(--muted);margin-right:auto}
+.dr-nav button{width:2.1rem;height:2.1rem;border:1px solid var(--tbd);background:#fff;border-radius:.6rem;font-weight:800;color:var(--ink2);font-size:1rem;line-height:1}
+.dr-nav button:hover{background:var(--tc);color:#fff;border-color:var(--tc)}
+.dr-group{font-size:.76rem;font-weight:800;color:var(--tc);letter-spacing:.02em}
+.dr-head h2{font-size:1.45rem;font-weight:800;letter-spacing:-.025em;line-height:1.3;margin-top:.15rem}
+.dr-art{display:inline-block;margin-top:.45rem;font-size:.78rem;font-weight:700;color:var(--ink2);background:#fff;border:1px solid var(--tbd);border-radius:.35rem;padding:.05rem .5rem}
+.dr-body{flex:1;overflow:auto;padding:1.1rem 1.2rem 3rem;overscroll-behavior:contain}
+.dr-sum{font-size:1rem;color:var(--ink);line-height:1.65;font-weight:500}
+.decide{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .9rem;margin-top:1rem;padding:.7rem .9rem;border:1px dashed var(--line);border-radius:.85rem;background:#fafbfd}
+.decide .g{display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;color:var(--muted)}
+.dchips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.8rem}
+.dchips span{font-size:.78rem;font-weight:800;color:var(--real);background:var(--real-bg);border-radius:.4rem;padding:.08rem .55rem}
+.sec{margin-top:.75rem;border:1px solid var(--sbd);background:var(--sbg);border-radius:.85rem;padding:.75rem 1rem .85rem}
+.sec.ok  {--sc:var(--real);--sbg:var(--real-bg);--sbd:var(--real-bd)}
+.sec.bad {--sc:var(--dead);--sbg:var(--dead-bg);--sbd:var(--dead-bd)}
+.sec.biz {--sc:var(--biz); --sbg:var(--biz-bg); --sbd:var(--biz-bd)}
+.sec.info{--sc:#475569;    --sbg:#f5f7fa;       --sbd:#e2e6ed}
+.sec-h{display:flex;align-items:center;gap:.5rem;font-size:.84rem;font-weight:800;color:var(--sc);margin-bottom:.2rem}
+.sec-h::before{content:"";width:.55rem;height:.55rem;border-radius:2px;background:var(--sc)}
+.sec ul{list-style:none;padding:0}
+.sec li{position:relative;padding-left:1rem;margin-top:.45rem;font-size:.94rem;color:var(--ink);line-height:1.65}
+.sec li::before{content:"";position:absolute;left:.15rem;top:.75em;width:.3rem;height:.3rem;border-radius:50%;background:var(--sc);opacity:.65}
+.ref{display:inline-block;margin-left:.4rem;font-size:.72rem;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:.3rem;padding:0 .4rem;line-height:1.5;white-space:nowrap;vertical-align:.08em}
+.lks{margin-top:1.2rem}
+.lks h3{font-size:.78rem;font-weight:800;letter-spacing:.06em;color:var(--muted);margin-bottom:.5rem}
+.lkc{border:1px solid var(--line);background:#f6f8fc;border-radius:.85rem;padding:.7rem .9rem;margin-top:.5rem}
+.lkc .h{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.84rem;color:var(--ink2)}
+.lkc .h i{font-style:normal;background:var(--ink);color:#fff;border-radius:999px;padding:0 .55rem;font-size:.76rem}
+.lkc p{margin-top:.3rem;font-size:.9rem;color:var(--ink2);line-height:1.6}
+.peers{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
+.peers button{border:1px solid var(--tbd);background:var(--tbg);color:var(--tc);border-radius:999px;padding:.12rem .75rem;font-size:.8rem;font-weight:800}
+.peers button:hover{background:var(--tc);color:#fff}
+.scrim{position:fixed;z-index:44;left:0;right:0;bottom:0;top:var(--tb);background:rgba(15,23,42,.38);opacity:0;pointer-events:none;transition:opacity .2s}
+body.dr .scrim{opacity:1;pointer-events:auto}
+@media (min-width:1200px){
+  .scrim{display:none}
+  body.dr .page{margin-right:var(--dw)}
+}
+
+
+.hero .wrap{position:relative}
+.credit{position:absolute;right:2rem;top:0;text-align:right;line-height:1.45}
+.credit b{display:block;font-size:.95rem;font-weight:800;letter-spacing:-.01em;color:#fff}
+.credit span{display:block;font-size:.78rem;font-weight:600;color:#a9bff0;letter-spacing:.02em}
+.credit i{font-style:normal;display:inline-block;margin-top:.25rem;font-size:.78rem;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:0 .65rem}
+footer .sign{font-size:.86rem;color:var(--ink2);padding-bottom:.6rem;margin-bottom:.6rem;border-bottom:1px solid var(--line2)}
+footer .sign b{color:var(--brand)}
+@media (max-width:700px){ .credit{position:static;text-align:left;margin-bottom:.9rem} }
+
+/* ───────── 걸러지는 구조 개념도 ───────── */
+.bridge{margin-top:1.5rem}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.bp{background:#fff;border:1px solid var(--line);border-radius:1.1rem;box-shadow:var(--shadow);padding:.9rem 1rem 1rem}
+.bp h3{font-size:.76rem;font-weight:800;letter-spacing:.07em;color:var(--muted);margin-bottom:.6rem}
+.ba,.bd{display:grid;gap:.45rem;grid-template-rows:repeat(3,minmax(3.6rem,auto))}
+.ba{grid-template-columns:18fr 20fr 62fr;grid-template-areas:"a0 a0 a0" "a1 a2 a2" ". a3 a4"}
+.bd{grid-template-columns:20fr 80fr;grid-template-areas:"b0 b0" "b1 b1" "b3 b4"}
+.bc{display:flex;flex-direction:column;justify-content:center;gap:.1rem;padding:.45rem .75rem;border-radius:.75rem;border:1px solid var(--tbd);background:var(--tbg);color:var(--tc);font-weight:800;font-size:.9rem;text-align:left;line-height:1.3;min-width:0}
+.bc small{font-size:.72rem;font-weight:600;color:var(--ink2)}
+.bc.solid{background:var(--tc);color:#fff;border-color:var(--tc)}
+.bc.solid small{color:rgba(255,255,255,.82)}
+.bc.out{border:2px dashed var(--tc)}
+button.bc{cursor:pointer;transition:transform .12s,box-shadow .12s}
+button.bc:hover{transform:translateY(-2px)}
+button.bc[aria-pressed=true]{box-shadow:0 0 0 3px var(--tc)}
+.bres{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:stretch}
+.bres .bc{flex:1 1 15rem}
+.bres .op{align-self:center}
+@media (max-width:1099px){ .bgrid{grid-template-columns:1fr} }
+
+
+/* ───────── 원문 보기 ───────── */
+.orig{margin-top:1.2rem}
+.orig h3{font-size:.78rem;font-weight:800;letter-spacing:.06em;color:var(--muted);margin-bottom:.5rem}
+.orig h3 small{font-weight:600;letter-spacing:0}
+.oc{display:flex;flex-wrap:wrap;gap:.35rem}
+.ochip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:.12rem .75rem;font-size:.8rem;font-weight:800;color:var(--ink2)}
+.ochip:hover{border-color:var(--ink)}
+.ochip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.oa{margin-top:.6rem;border:1px solid var(--line);border-radius:.85rem;background:#fafbfd;padding:.7rem .9rem}
+.oa-h{font-weight:800;font-size:.88rem;color:var(--brand);margin-bottom:.35rem}
+.op{margin:.35rem 0 0;font-size:.86rem;line-height:1.65;color:var(--ink2)}
+.op.cit{background:var(--real-bg);border-left:3px solid var(--real);padding:.25rem .55rem;border-radius:0 .4rem .4rem 0;color:var(--ink)}
+.oi{list-style:none;margin:.15rem 0 0;padding-left:.9rem;font-size:.84rem;line-height:1.6;color:var(--ink2)}
+.oi li{margin-top:.2rem}
+.onote{margin-top:.6rem;font-size:.74rem;color:var(--muted);line-height:1.5}
+
+/* ───────── 서류 체크리스트 ───────── */
+dialog#docdlg,dialog.tool{border:0;border-radius:1.2rem;padding:0;width:min(1120px,96vw);max-height:92vh;box-shadow:0 30px 80px rgba(15,23,42,.35);color:var(--ink);font:inherit;overflow:hidden}
+dialog#docdlg[open],dialog.tool[open]{display:flex;flex-direction:column}
+dialog#docdlg::backdrop,dialog.tool::backdrop{background:rgba(15,23,42,.5)}
+.dd-head{display:flex;align-items:center;gap:1rem;padding:.9rem 1.3rem;background:var(--brand);color:#fff}
+.dd-head h2{font-size:1.1rem;font-weight:800;margin-right:auto}
+.dd-head h2 small{font-size:.76rem;font-weight:600;color:#a9bff0;margin-left:.5rem}
+.dd-head .ibtn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff}
+.dd-head .ibtn:hover{background:#fff;color:var(--brand)}
+.dd-meta{display:flex;flex-wrap:wrap;gap:.8rem 1.4rem;padding:.8rem 1.3rem;border-bottom:1px solid var(--line);background:#f8fafd}
+.dd-meta label{display:flex;align-items:center;gap:.5rem;font-size:.84rem;font-weight:700;color:var(--ink2)}
+.dd-meta input{height:2.3rem;border:1px solid var(--line);border-radius:.6rem;padding:0 .7rem;font:inherit;font-size:.9rem;background:#fff;min-width:12rem}
+.dd-body{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);flex:1;min-height:0}
+.dd-col{padding:1rem 1.3rem;overflow:auto;max-height:56vh}
+.dd-col + .dd-col{border-left:1px solid var(--line)}
+.dd-col h3{font-size:.8rem;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-bottom:.6rem;display:flex;align-items:center;gap:.6rem}
+.dd-grp{font-size:.74rem;font-weight:800;color:var(--brand);margin:.8rem 0 .3rem}
+.dd-acc label{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;border-radius:.5rem;font-size:.9rem;cursor:pointer}
+.dd-acc label:hover{background:var(--real-bg)}
+.dd-acc input,.dl input{width:1.05rem;height:1.05rem;accent-color:var(--real);flex:none}
+.dd-btns{display:flex;gap:.4rem;margin-bottom:.4rem}
+.dd-btns button{height:2rem;font-size:.78rem}
+.dl{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .6rem;border:1px solid var(--line2);border-radius:.7rem;margin-bottom:.4rem;cursor:pointer;background:#fff}
+.dl:hover{border-color:var(--real-bd);background:#f7faff}
+.dl.on{background:#f1f5f9;opacity:.7}
+.dl.on .dn{text-decoration:line-through;color:var(--muted)}
+.dl input{margin-top:.2rem}
+.dl .dn{font-size:.9rem;font-weight:600;line-height:1.5}
+.dl .dm{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.25rem}
+.dtag{font-size:.7rem;font-weight:800;color:var(--real);background:var(--real-bg);border-radius:.3rem;padding:0 .4rem}
+.dtag.c{color:var(--ink2);background:#eef1f6}
+.dref{font-size:.7rem;font-weight:700;color:var(--muted)}
+.dprog{margin-left:auto;font-size:.8rem;font-weight:800;color:var(--real)}
+.dbar{height:.4rem;border-radius:999px;background:#e5e9f0;margin-bottom:.8rem;overflow:hidden}
+.dbar i{display:block;height:100%;background:var(--real);width:0;transition:width .2s}
+.dd-foot{padding:.8rem 1.3rem;border-top:1px solid var(--line);background:#f8fafd;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.dd-foot .pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.dd-foot .pri:hover{background:var(--navy);color:#fff}
+#dMsg{font-size:.84rem;font-weight:700;color:var(--biz)}
+.dd-foot details{flex-basis:100%}
+.dd-foot summary{cursor:pointer;font-size:.8rem;font-weight:700;color:var(--muted)}
+.dd-foot textarea{width:100%;height:9rem;margin-top:.4rem;border:1px solid var(--line);border-radius:.6rem;padding:.6rem .8rem;font:inherit;font-size:.84rem;line-height:1.6;resize:vertical;background:#fff}
+.dd-empty{padding:1.2rem;text-align:center;color:var(--muted);font-size:.88rem}
+@media (max-width:760px){
+  .dd-body{grid-template-columns:1fr}
+  .dd-col + .dd-col{border-left:0;border-top:1px solid var(--line)}
+  .dd-col{max-height:none}
+  dialog#docdlg[open],dialog.tool[open]{max-height:96vh;overflow:auto}
+}
+@media print{ dialog#docdlg,dialog.tool{display:none!important} }
+
+
+/* ───────── 도구(판정 질문지·계산기) ───────── */
+.qopen{display:inline-flex;align-items:center;margin-top:.7rem;border:1px solid var(--brand);background:var(--brand);color:#fff;border-radius:.7rem;padding:.4rem .9rem;font-size:.86rem;font-weight:800}
+.qopen:hover{background:var(--navy)}
+.qz-body{display:grid;grid-template-columns:14rem minmax(0,1fr);flex:1;min-height:0}
+.qz-side{border-right:1px solid var(--line);padding:.8rem;overflow:auto;max-height:64vh;background:#f8fafd}
+.qz-acc{display:block;width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:.6rem;padding:.5rem .7rem;font-size:.9rem;font-weight:700;color:var(--ink2)}
+.qz-acc:hover{background:#fff;border-color:var(--line)}
+.qz-acc.on{background:var(--brand);color:#fff}
+.qz-main{padding:1.1rem 1.5rem 1.5rem;overflow:auto;max-height:64vh}
+.qz-empty{color:var(--muted);padding:2rem 0;line-height:1.8}
+.qz-title{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.8rem}
+.qz-steps{display:grid;gap:.35rem;margin-bottom:.9rem}
+.qz-step{display:block;text-align:left;border:1px solid var(--line);background:#fafbfd;border-radius:.7rem;padding:.45rem .8rem;font-size:.84rem;color:var(--ink2);line-height:1.5}
+.qz-step:hover{border-color:var(--real);background:var(--real-bg)}
+.qz-step b{display:inline-block;margin-right:.45rem;color:var(--real)}
+.qz-step i{display:block;font-style:normal;font-weight:800;color:var(--ink);margin-top:.1rem;padding-left:1.1rem}
+.qz-q{border:2px solid var(--real);background:var(--real-bg);border-radius:1rem;padding:1rem 1.1rem}
+.qz-qt{font-size:1.05rem;font-weight:800;line-height:1.55}
+.qz-ref{margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.3rem}
+.qz-opts{display:grid;gap:.5rem;margin-top:.9rem}
+.qz-opt{text-align:left;border:1px solid var(--real-bd);background:#fff;border-radius:.75rem;padding:.65rem .9rem;font-size:.95rem;font-weight:700;color:var(--ink);line-height:1.5}
+.qz-opt:hover{background:var(--real);color:#fff;border-color:var(--real)}
+.qz-res{border:2px solid var(--ink);border-radius:1rem;padding:1.1rem 1.2rem;background:#fff}
+.qz-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.qz-tags .tag{font-size:.85rem;padding:.15rem .7rem}
+.qz-rt{font-size:1.2rem;font-weight:800;letter-spacing:-.02em}
+.qz-res p{margin:.5rem 0 0;font-size:.95rem;line-height:1.7;color:var(--ink2)}
+.qz-extra{margin-top:.9rem;border:1px solid var(--line);background:#f8fafd;border-radius:.8rem;padding:.6rem .9rem}
+.qz-extra b{font-size:.8rem;color:var(--muted)}
+.qz-extra ul{margin:.3rem 0 0;padding-left:1.1rem;font-size:.9rem;line-height:1.65;color:var(--ink2)}
+.qz-btns{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.qz-btns .pri2{background:var(--brand);border-color:var(--brand);color:#fff}
+.qz-btns .pri2:hover{background:var(--navy);color:#fff}
+.qz-disc{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+.cl-tabs{display:flex;gap:.4rem;padding:.6rem 1.3rem;border-bottom:1px solid var(--line);background:#f8fafd}
+.cl-tabs .ibtn[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+.cl-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);flex:1;min-height:0}
+.cl-grid.one{grid-template-columns:minmax(0,1fr)}
+.cl-col{padding:1rem 1.3rem 1.2rem;overflow:auto;max-height:64vh}
+.cl-col + .cl-col{border-left:1px solid var(--line);background:#fbfcfe}
+.cl-note{font-size:.84rem;color:var(--ink2);line-height:1.65;margin-bottom:.4rem}
+.fs{font-size:.78rem;font-weight:800;letter-spacing:.04em;color:var(--brand);margin:1.1rem 0 .45rem}
+.fs em{font-style:normal;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:.4rem}
+.fg{display:grid;grid-template-columns:minmax(0,1fr) 11rem;gap:.6rem;align-items:center;margin-bottom:.35rem;font-size:.88rem;font-weight:700;color:var(--ink2)}
+.fg small{display:block;font-weight:500;color:var(--muted);font-size:.74rem;line-height:1.35}
+.fg input,.dpc input{height:2.2rem;border:1px solid var(--line);border-radius:.6rem;padding:0 .7rem;font:inherit;font-size:.92rem;text-align:right;background:#fff;width:100%;min-width:0;font-variant-numeric:tabular-nums}
+.fg input:focus,.dpc input:focus,.dpc textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(10,47,125,.13)}
+.orow{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.5rem .3rem;border-bottom:1px solid var(--line2);font-size:.92rem}
+.orow span small{display:block;color:var(--muted);font-size:.74rem;font-weight:500}
+.orow b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.orow.sub{padding-left:1.2rem;color:var(--ink2)}
+.orow.k{background:var(--real-bg);border-radius:.6rem;border:0;padding:.7rem .8rem;margin:.5rem 0;font-weight:800;font-size:1rem}
+.orow.k b{color:var(--real);font-size:1.15rem}
+.vbig{display:flex;justify-content:space-between;align-items:center;margin-top:.4rem;border-radius:.9rem;padding:.8rem 1rem;font-weight:800;font-size:1.05rem;border:2px solid var(--tbd);background:var(--tbg);color:var(--tc)}
+.vbig b{font-size:1.3rem}
+.cwarn{margin-top:.6rem;padding:.5rem .8rem;border-radius:.7rem;background:#fff5f4;border:1px solid var(--dead-bd);color:var(--dead);font-size:.84rem;font-weight:700;line-height:1.55}
+.dpc{border:1px solid var(--line);border-radius:.9rem;padding:.8rem .9rem;margin-bottom:.7rem;background:#fff}
+.dpc-h{display:grid;grid-template-columns:minmax(0,1fr) 11rem auto;gap:.5rem;align-items:end;margin-bottom:.5rem}
+.dpc-h label{font-size:.76rem;font-weight:700;color:var(--muted);display:grid;gap:.2rem}
+.dpc-h input[type=text].nm{text-align:left}
+.dpc textarea{width:100%;height:6.5rem;border:1px solid var(--line);border-radius:.6rem;padding:.5rem .7rem;font:inherit;font-size:.86rem;line-height:1.5;resize:vertical;font-variant-numeric:tabular-nums}
+.dpc-r{display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;margin-top:.5rem;font-size:.86rem;color:var(--ink2)}
+.dpc-r b{color:var(--ink);font-variant-numeric:tabular-nums}
+.dpc-r .ev{color:var(--real);font-weight:800}
+.dpc-x{height:2.2rem;border:1px solid var(--line);background:#fff;border-radius:.6rem;padding:0 .7rem;font-size:.8rem;font-weight:700;color:var(--muted)}
+.dpc-x:hover{border-color:var(--dead);color:var(--dead)}
+.dp-tot{margin-top:.4rem;padding:.8rem 1rem;border-radius:.9rem;background:var(--real-bg);border:1px solid var(--real-bd);font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.dp-tot b{color:var(--real);font-size:1.2rem;font-variant-numeric:tabular-nums}
+@media (max-width:800px){
+  .qz-body,.cl-grid{grid-template-columns:1fr}
+  .qz-side{border-right:0;border-bottom:1px solid var(--line);max-height:none;display:flex;flex-wrap:wrap;gap:.3rem}
+  .qz-acc{width:auto}
+  .qz-main,.cl-col{max-height:none}
+  .cl-col + .cl-col{border-left:0;border-top:1px solid var(--line)}
+  .fg{grid-template-columns:1fr}
+  .dpc-h{grid-template-columns:1fr}
+}
+@media (max-width:1100px){ .search{flex-basis:9rem} .brand span{display:none} }
+
+/* ───────── 실무 함정 ───────── */
+.traps{margin-top:2.2rem}
+.cap{display:flex;align-items:center;gap:.6rem;font-size:.8rem;font-weight:800;letter-spacing:.06em;color:var(--muted);margin-bottom:.9rem}
+.cap::before{content:"";width:.9rem;height:.2rem;border-radius:2px;background:var(--brand)}
+.cap small{font-weight:600;letter-spacing:0}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:.85rem;counter-reset:t}
+.tcard{counter-increment:t;position:relative;background:#fff;border:1px solid var(--line);border-radius:1rem;padding:1rem 1.1rem 1.05rem 3.3rem;box-shadow:var(--shadow)}
+.tcard::before{content:counter(t);position:absolute;left:1rem;top:1rem;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--real-bg);color:var(--real);font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.tcard b.t{display:block;margin-bottom:.25rem;font-size:.98rem;font-weight:800}
+.tcard p{font-size:.9rem;color:var(--ink2);line-height:1.62}
+.tcard p b{color:var(--brand)}
+footer{margin:2rem 0 3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);line-height:1.7}
+footer p + p{margin-top:.3rem}
+footer b{color:var(--ink2)}
+main{padding-bottom:1rem}
+#printdoc{display:none}
+
+/* ───────── 반응형 ───────── */
+@media (max-width:1099px){
+  .eqrow{grid-template-columns:1fr 1fr}
+  .eqrow .eqc:last-child{grid-column:1/-1}
+  .cats{grid-template-columns:repeat(2,1fr)}
+  .map{grid-template-columns:1fr}
+}
+@media (max-width:1099px){ .hint .keys{display:none} }
+@media (max-width:700px){
+  .wrap{padding:0 1rem}
+  .brand span{display:none}
+  .brand{font-size:.85rem}
+  .tb{gap:.5rem}
+  .tools .pr{display:none}
+  .hero{padding:1.4rem 0 5.6rem}
+  .hero h1{font-size:1.5rem}
+  .lead{font-size:.9rem}
+  .eqrow{grid-template-columns:1fr}
+  .cats{gap:.5rem}
+  .cat{padding:.7rem .8rem .7rem 1rem}
+  .cat span{font-size:.78rem}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));padding:.6rem .8rem .9rem}
+  .gh{padding:.9rem .8rem 0}
+  .drawer{top:auto;height:88vh;width:100%;border-radius:1.2rem 1.2rem 0 0;border-left:0;transform:translateY(104%)}
+  .scrim{top:0}
+}
+
+/* ───────── 인쇄 ───────── */
+@media print{
+  @page{size:A4 landscape;margin:8mm}
+  html{font-size:10.5px!important}
+  body{background:#fff}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .topbar,.drawer,.scrim,.cats,.hint,.map{display:none!important}
+  body.dr .page{margin:0}
+  .hero{padding:.8rem 0 4.6rem}
+  .eqrow{grid-template-columns:1fr 1fr 1.15fr}
+  .wrap{padding:0}
+  #printdoc{display:block;columns:2;column-gap:1.2rem;margin-top:1rem}
+  #printdoc .pg{break-inside:avoid;margin-bottom:.7rem;border:1px solid var(--line);border-left:4px solid var(--tc);border-radius:.5rem;padding:.5rem .7rem;background:#fff}
+  #printdoc h3{font-size:.8rem;font-weight:800;color:var(--brand);margin:.6rem 0 .3rem;column-span:all}
+  #printdoc h4{font-size:1rem;font-weight:800;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+  #printdoc .sm{font-size:.9rem;color:var(--ink2);margin-top:.15rem}
+  .sec{break-inside:avoid;margin-top:.4rem;padding:.4rem .6rem .5rem}
+  .tcard{break-inside:avoid;box-shadow:none}
+  .eqc{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="wrap tb">
+    <div class="brand">기업진단지침<span>재무상태표 지도</span></div>
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="계정·조문·키워드 검색 (예: 60일, §23, 임대)" aria-label="검색" autocomplete="off" spellcheck="false">
+      <kbd>/</kbd>
+    </label>
+    <div class="tools">
+      <button id="quizBtn" class="ibtn" title="계정별 판정 질문지">판정 질문지</button>
+      <button id="calcBtn" class="ibtn" title="실질자본·겸업비율·예금 평균잔액 계산">계산기</button>
+      <button id="docBtn" class="ibtn" title="계정별 입증서류 체크리스트">서류 체크</button>
+      <button id="sumTgl" class="ibtn" aria-pressed="true" title="타일 요약 표시/숨김">요약</button>
+      <div class="fsz" role="group" aria-label="글자 크기">
+        <button id="fsMinus" class="ibtn s" aria-label="글자 작게">가</button>
+        <button id="fsPlus" class="ibtn l" aria-label="글자 크게">가</button>
+      </div>
+      <button class="ibtn pr" onclick="window.print()">인쇄</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page">
+  <header class="hero">
+    <div class="wrap">
+      <div class="credit"><b>더나은세무법인 덕수지점</b><span>Deoksu Tax Firm</span><i>김태현 세무사</i></div>
+      <p class="eyebrow">건설업관리규정 별지 2 · 기업진단지침</p>
+      <h1>건설업체 실질자본 진단,<br>재무상태표 한 장으로 보기</h1>
+      <p class="lead">계정마다 어떤 분류(실질·부실·겸업·차감)로 들어가는지 색으로 한눈에 보고, 눌러서 요건과 예외를 확인하세요.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="eqrow" aria-label="진단 산식 (별지 제1호)">
+      <div class="eqc">
+        <h2>자산 쪽 · 별지 제1호</h2>
+        <div class="eqline">
+          <span class="ob t-real"><span class="r">Ⅰ</span>실질자산</span><span class="op">−</span>
+          <span class="ob t-biz">겸업자산</span>
+          <span class="grp"><span class="op">=</span><span class="ob t-real"><span class="r">Ⅲ</span>진단대상사업 실질자산</span></span>
+        </div>
+        <p class="eqnote"><b>Ⅰ</b> = 회사제시자산총계 + 자산증가 − 자산감소 · <b>부실자산은 여기서 빠짐</b></p>
+      </div>
+      <div class="eqc">
+        <h2>부채 쪽 · 별지 제1호</h2>
+        <div class="eqline">
+          <span class="ob t-real"><span class="r">Ⅱ</span>실질부채</span><span class="op">−</span>
+          <span class="ob t-biz">겸업부채</span>
+          <span class="grp"><span class="op">=</span><span class="ob t-real"><span class="r">Ⅳ</span>진단대상사업 실질부채</span></span>
+        </div>
+        <p class="eqnote"><b>Ⅱ</b> = 회사제시부채총계 + 부채증가 − 부채감소</p>
+      </div>
+      <div class="eqc">
+        <h2>결과 · 진단의견 (§9③)</h2>
+        <div class="eqline"><span class="ob res"><span class="r">Ⅴ</span>진단대상사업 실질자본</span><span class="op">=</span><span class="ob t-real">Ⅲ</span><span class="op">−</span><span class="ob t-real">Ⅳ</span></div>
+        <div class="verd">
+          <div class="vd t-real"><span>Ⅴ ≥ 등록기준 자본액</span><b>적격</b></div>
+          <div class="vd t-dead"><span>Ⅴ &lt; 등록기준 자본액</span><b>부적격</b></div>
+          <div class="vd t-none"><span>§8① 진단불능 사유 해당</span><b>진단불능</b></div>
+        </div>
+      </div>
+    </section>
+    <p class="basis"><b>평가 기준</b> 지침 규정 외에는 기업회계기준(§2②, §12①). 계정은 과목명이 아닌 <b>실질적 내용</b>에 따라 적용(§12②). K-IFRS 적용 평가 불가 — 단, 감사보고서를 제출한 경우 예외(§12③).</p>
+
+    <section class="bridge" aria-label="실질자본이 되는 과정">
+      <h2 class="cap">실질자본이 되는 과정 <small>개념도 · 칸 크기는 임의 · 점선 칸은 걸러지는 부분 · 눌러서 분류 강조</small></h2>
+      <div class="bgrid">
+        <div class="bp">
+          <h3>자산</h3>
+          <div class="ba">
+            <div class="bc solid t-none" style="grid-area:a0">회사제시 자산총계<small>(ⅰ) ± 평정 증감 (ⅱ·ⅲ)</small></div>
+            <button class="bc out t-dead" style="grid-area:a1" data-fbtn="부실" aria-pressed="false">부실자산<small>Ⅰ에서 제외</small></button>
+            <div class="bc t-real" style="grid-area:a2"><span><b>Ⅰ</b> 실질자산</span><small>평정 후 금액</small></div>
+            <button class="bc out t-biz" style="grid-area:a3" data-fbtn="겸업" aria-pressed="false">겸업자산<small>Ⅲ에서 차감</small></button>
+            <div class="bc solid t-real" style="grid-area:a4"><span><b>Ⅲ</b> 진단대상사업 실질자산</span><small>Ⅰ − 겸업자산</small></div>
+          </div>
+        </div>
+        <div class="bp">
+          <h3>부채</h3>
+          <div class="bd">
+            <div class="bc solid t-none" style="grid-area:b0">회사제시 부채총계<small>(ⅳ) ± 평정 증감 (ⅴ·ⅵ)</small></div>
+            <div class="bc t-real" style="grid-area:b1"><span><b>Ⅱ</b> 실질부채</span><small>회사제시 부채 ± 평정 후 금액</small></div>
+            <button class="bc out t-biz" style="grid-area:b3" data-fbtn="겸업" aria-pressed="false">겸업부채<small>Ⅳ에서 차감</small></button>
+            <div class="bc solid t-real" style="grid-area:b4"><span><b>Ⅳ</b> 진단대상사업 실질부채</span><small>Ⅱ − 겸업부채</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="bres">
+        <div class="bc solid t-real"><span><b>Ⅴ</b> 진단대상사업 실질자본</span><small>Ⅲ − Ⅳ</small></div>
+        <span class="op">−</span>
+        <button class="bc out t-cut" data-fbtn="차감" aria-pressed="false">진단조정 차감항목<small>§13② · §26② 등 — 실질자본에서 직접 차감</small></button>
+        <span class="op">→</span>
+        <div class="bc t-none"><span>등록기준 자본액과 비교</span><small>이상 적격 · 미달 부적격 (§9③)</small></div>
+      </div>
+    </section>
+
+    <section class="cats" id="cats" aria-label="분류 필터">
+      <button class="cat t-real" data-f="실질" aria-pressed="false"><div class="ct"><b>실질</b><em></em></div><span>진단대상사업의 실질자산·부채로 인정</span></button>
+      <button class="cat t-dead" data-f="부실" aria-pressed="false"><div class="ct"><b>부실</b><em></em></div><span>실질자산(Ⅰ)에서 제외</span></button>
+      <button class="cat t-biz" data-f="겸업" aria-pressed="false"><div class="ct"><b>겸업</b><em></em></div><span>Ⅰ·Ⅱ에는 남고 Ⅲ·Ⅳ에서 차감</span></button>
+      <button class="cat t-cut" data-f="차감" aria-pressed="false"><div class="ct"><b>차감</b><em></em></div><span>실질자본에서 직접 차감</span></button>
+    </section>
+
+    <div class="hint" id="hint"></div>
+
+    <div class="map" id="map">
+      <svg class="links" id="links" aria-hidden="true"></svg>
+      <section class="panel" aria-label="자산">
+        <div class="ph"><div><h2>자산 <small>Assets</small></h2><p>회사제시금액 → 평정 → 실질자산</p></div><span class="n" id="nL"></span></div>
+        <div id="bodyL"></div>
+      </section>
+      <section class="panel" aria-label="부채 및 자본">
+        <div class="ph"><div><h2>부채 · 자본 <small>Liabilities &amp; Equity</small></h2><p>부외부채 · 겸업부채 · 차감항목</p></div><span class="n" id="nR"></span></div>
+        <div id="bodyR"></div>
+      </section>
+    </div>
+
+    <section class="traps" aria-label="실무 함정">
+      <h2 class="cap">실무 함정 <small>제작용 요약 · 지침 원문 아님</small></h2>
+      <div class="tgrid">
+        <div class="tcard"><b class="t">부실자산 ≠ 겸업자산</b><p>부실자산은 <b>실질자산(Ⅰ)에서 제외</b>, 겸업자산은 Ⅰ에는 남고 <b>Ⅲ = Ⅰ − 겸업자산</b>으로 차감. 둘 다 최종 진단대상사업 실질자본(Ⅴ)에서는 빠진다(§7④).</p></div>
+        <div class="tcard"><b class="t">30일 vs 60일</b><p>예금 <b>평가</b>는 기준일 포함 <b>30일 평균잔액</b>(기준일 잔액 초과 불가, §15②). <b>증빙</b>은 <b>60일</b> 거래실적증명(§15③). 혼동 주의.</p></div>
+        <div class="tcard"><b class="t">60일 출금 추적</b><p>회수·환입·매도 후 60일 이내 부실·겸업자산으로 출금되면 부실자산 처리: 예금 §15③2호, 유가증권 §16③4호, 건설중인자산 §23④.</p></div>
+        <div class="tcard"><b class="t">구제 요건은 계정마다 따로</b><p>재고(1년 이내+실재 확인), 대여금(종업원 주택자금), 받을채권(공공기관·판결확정), 선급금(§20 4유형), 건물 대물회수(2년), 본사 업무용 임대건물(§23⑥ 단서).</p></div>
+      </div>
+    </section>
+
+    <div id="printdoc" aria-hidden="true"></div>
+
+    <footer>
+      <p class="sign"><b>더나은세무법인 덕수지점</b> · Deoksu Tax Firm · 김태현 세무사</p>
+      <p>출처: 건설업체 기업진단지침(건설업관리규정 별지 2) — 2026-11-04 사용자 제공본(옵시디언 볼트 90_법령). korean-law MCP로 조회되지 않는 고시이며 본문에 구 명칭("국토해양부장관")이 남아 있어 <b>현행 고시와의 일치 여부는 미확인</b>입니다.</p>
+      <p>본 도식은 요약이므로 적용 시 조문 원문을 우선하십시오. 별지 제2호 계정 중 지침에 별도 규정이 없는 계정은 "규정없음"으로 표시했습니다.</p>
+    </footer>
+  </main>
+</div>
+
+<dialog id="docdlg" aria-label="입증서류 체크리스트">
+  <div class="dd-head"><h2>입증서류 체크리스트<small>실질자본 진단 · §6·§7 및 계정별 조문 기준</small></h2><button class="ibtn" id="dClose">닫기</button></div>
+  <div class="dd-meta">
+    <label>거래처명 <input id="dClient" type="text" placeholder="예: (주)OO건설" autocomplete="off"></label>
+    <label>진단기준일 <input id="dDate" type="date"></label>
+  </div>
+  <div class="dd-body">
+    <div class="dd-col">
+      <h3>1. 진단할 계정 선택</h3>
+      <div class="dd-btns"><button class="ibtn" id="dAll">전체 선택</button><button class="ibtn" id="dNone">선택 해제</button></div>
+      <div class="dd-acc" id="dAcc"></div>
+    </div>
+    <div class="dd-col">
+      <h3>2. 받을 서류 <span class="dprog" id="dProg"></span></h3>
+      <div class="dbar"><i id="dBar"></i></div>
+      <div id="dList"></div>
+    </div>
+  </div>
+  <div class="dd-foot">
+    <button class="ibtn pri" id="dCopy">요청 서류 목록 복사</button><button class="ibtn" id="dXlsx">엑셀 다운로드</button><span id="dMsg" role="status"></span>
+    <details><summary>복사될 내용 미리보기</summary><textarea id="dText" readonly></textarea></details>
+  </div>
+</dialog>
+
+<dialog id="quizdlg" class="tool" aria-label="판정 질문지">
+  <div class="dd-head"><h2>판정 질문지<small>질문에 답하면 분류와 근거 조문이 나옵니다</small></h2><button class="ibtn" data-tclose>닫기</button></div>
+  <div class="qz-body">
+    <div class="qz-side" id="qzSide"></div>
+    <div class="qz-main" id="qzMain"></div>
+  </div>
+  <div class="dd-foot"><button class="ibtn pri" id="qzXlsx" disabled title="왼쪽에서 계정을 선택하세요">이 계정 질문지 엑셀</button><button class="ibtn" id="qzXlsxAll">전체 계정 질문지 엑셀 (12시트)</button><span class="qz-disc">※ 지침 문언을 단순화한 질문입니다. 최종 판단은 원문과 증빙으로 확인하세요. 지침에 명시가 없는 부분은 “요검토”로 표시합니다.</span></div>
+</dialog>
+
+<dialog id="calcdlg" class="tool" aria-label="간이 계산기">
+  <div class="dd-head"><h2>간이 계산기<small>별지 제1호 산식 · §28 겸업비율 · §15 예금 평균잔액</small></h2><button class="ibtn" data-tclose>닫기</button></div>
+  <div class="cl-tabs" role="tablist">
+    <button class="ibtn" data-ctab="eq" aria-pressed="true">실질자본 산식</button>
+    <button class="ibtn" data-ctab="dep" aria-pressed="false">예금 30일 평균잔액</button>
+  </div>
+
+  <div class="cl-grid" data-cpane="eq">
+    <div class="cl-col">
+      <p class="cl-note">단위는 입력한 그대로(원, 천원 등) 계산됩니다. 비워 두면 0으로 봅니다.</p>
+      <div class="fs">① 회사제시 금액과 평정 증감 (별지 제1호)</div>
+      <label class="fg"><span>회사제시 자산총계 <small>(ⅰ)</small></span><input id="cA0" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>자산증가 <small>(ⅱ)</small></span><input id="cA1" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>자산감소 <small>(ⅲ) 부실자산 제외분 등</small></span><input id="cA2" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>회사제시 부채총계 <small>(ⅳ)</small></span><input id="cL0" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>부채증가 <small>(ⅴ)</small></span><input id="cL1" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>부채감소 <small>(ⅵ)</small></span><input id="cL2" inputmode="numeric" autocomplete="off"></label>
+
+      <div class="fs">② 겸업비율 (§28①2나) <em>공통자산·공통부채가 있을 때</em></div>
+      <label class="fg"><span>진단대상사업 수입금액 <small>진단기준일이 속한 회계연도</small></span><input id="cRevA" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>겸업사업 수입금액</span><input id="cRevB" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>겸업비율 직접 입력 (%) <small>수입금액이 없을 때 사용면적·종업원 수 등 합리적 방식 · 입력하면 우선 적용</small></span><input id="cRatio" inputmode="decimal" autocomplete="off"></label>
+
+      <div class="fs">③ 겸업자산·겸업부채 (별지 제2호)</div>
+      <label class="fg"><span>겸업자산 <small>열거 겸업자산 + 겸업사업 제공 자산(실지귀속 포함)</small></span><input id="cBA" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>공통 사용 자산 <small>× 겸업비율로 안분</small></span><input id="cCA" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>겸업부채 <small>겸업자산과 직접 관련된 부채 등</small></span><input id="cBL" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>공통 발생 부채 <small>× 겸업비율로 안분</small></span><input id="cCL" inputmode="numeric" autocomplete="off"></label>
+
+      <div class="fs">④ 선택 입력</div>
+      <label class="fg"><span>겸업사업 기준자본액 <small>관련법규로 정해진 경우 (§28②)</small></span><input id="cMin" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>추가 차감항목 <small>§7③·§13②·§26② 등을 위 평정에 넣지 않고 따로 차감할 때만</small></span><input id="cCut" inputmode="numeric" autocomplete="off"></label>
+      <label class="fg"><span>등록기준 자본액 <small>적격 판정용 (§9③)</small></span><input id="cReq" inputmode="numeric" autocomplete="off"></label>
+    </div>
+    <div class="cl-col cl-out">
+      <div id="cOut"></div>
+    </div>
+  </div>
+
+  <div class="cl-grid one" data-cpane="dep" hidden>
+    <div class="cl-col">
+      <p class="cl-note">§15②1 — 예금은 <b>진단기준일을 포함한 30일 동안의 은행거래실적 평균잔액</b>으로 평가하며, <b>기준일 현재 잔액을 초과할 수 없습니다.</b> 30일의 기산일과 종료일은 전체 예금에 동일하게 적용해야 합니다. 일별 잔액은 엑셀 열을 그대로 붙여넣으세요.</p>
+      <div id="dpList"></div>
+      <div class="dd-btns"><button class="ibtn" id="dpAdd">+ 계좌 추가</button></div>
+      <div class="dp-tot" id="dpTot"></div>
+      <p class="cl-note">※ §15②3의 가감(기준일 현재 실질자산을 예금으로 회수했거나, 기준일 후 실질자산 취득·실질부채 상환으로 인출한 경우)은 반영하지 않습니다. 필요하면 일별 잔액을 조정해 입력하세요.</p>
+    </div>
+  </div>
+  <div class="dd-foot"><span class="qz-disc">※ 간이 계산입니다. 별지 서식(제1호·제2호)과 증빙으로 최종 확인하세요.</span></div>
+</dialog>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="계정 상세" aria-hidden="true"></aside>
+
+<script>
+/* ===================== 데이터 (원본 그대로) ===================== */
+const TAGCLS = {실질:'real',부실:'dead',겸업:'biz',차감:'cut',규정없음:'none'};
+
+const LINKS = {
+  1:'사용·인출 제한 예금(§15④) ↔ 그 예금과 직접 관련된 차입금 = 겸업부채',
+  2:'사용·인출 제한 유가증권(§16③3) ↔ 직접 관련 차입금 = 겸업부채',
+  3:'임대 중인 본사 업무용 건물(§23⑥ 단서) ↔ 그 건물의 담보 부채 = 실질부채',
+  4:'부실자산(§13①) ↔ 부실자산과 임의 상계된 부채 상당액 = 실질자본 차감(§13②1)',
+  5:'국가·지자체·공공기관 채권(§17④1) ↔ 관련 부채 §25 차감 평가',
+  6:'예금(§15⑤) ↔ 금융거래확인서·신용정보조회서로 부외부채 검토',
+  7:'토지·건물(§23⑤) ↔ 등기부등본으로 부외부채 평가',
+  8:'진행기준 매출채권(§13②2) ↔ 세무상 수입금액 제외분 상당액 = 실질자본 차감',
+  9:'공통 사용 자산 × 겸업비율 ↔ 공통 발생 부채 × 겸업비율(§28, 별지 제2호)'
+};
+
+const S = (ok,bad,biz,info)=>{
+  const a=[];
+  if(ok&&ok.length)a.push({k:'ok',t:'실질자산 인정',items:ok});
+  if(bad&&bad.length)a.push({k:'bad',t:'부실자산',items:bad});
+  if(biz&&biz.length)a.push({k:'biz',t:'겸업자산',items:biz});
+  if(info&&info.length)a.push({k:'info',t:'참고',items:info});
+  return a;
+};
+
+const ROWS = [
+/* ---------- 좌: 자산 ---------- */
+{id:'gen_bad',side:'L',group:'부실자산 총칙',gcls:'red',name:'부실자산 총칙',art:'§13①, §7②1',base:'부실',alt:[],
+ sum:'지침이 부실로 분류한 자산 · 비소유 자산 · 열거 자산 (단, 이 지침으로 실질자산 평가된 것은 제외)',chips:[],links:[4],
+ sec:S(['이 지침의 다른 조항으로 진단대상사업 실질자산으로 평가된 자산은 부실자산에서 제외 (§13① 3호 괄호)'],
+  ['이 지침에서 부실자산으로 분류된 자산 (§13①1)','진단받는 자가 법적 또는 실질적으로 소유하지 않은 자산 (§13①2)','무기명식 금융상품 · 실재하지 않거나 출처 불분명한 유가증권 (§13①3 가·나)','가지급금·대여금 (다) · 미수금·미수수익 (라) · 선급금·선납세금·선급비용 (마)','부도어음·장기성매출채권·대손처리할 자산 (바) · 무형자산 (사)'],
+  [],['실재성·적정성을 확인할 수 없는 경우 부실·겸업 분류 및 차감 대상은 진단대상사업 실질자본에서 제외 (§7④)'])},
+
+/* 당좌자산 */
+{id:'cash',side:'L',group:'유동자산 · 당좌자산',name:'현금및현금성자산 · 전도금',art:'§14, §7②2',base:'실질',alt:['부실'],
+ sum:'현금실사·출납장으로 확인한 금액만 인정, 자본총계의 1/100 초과 현금은 부실',chips:['자본총계 1/100'],links:[],
+ sec:S(['현금 = 전도금 + 현금성자산 (예금 제외) (§14①)','현금실사·현금출납장 등으로 확인한 금액만 인정 (§14②)'],
+  ['회사제시 재무제표 자본총계의 100분의 1 초과 현금 (§14②, §7②2)'])},
+
+{id:'deposit',side:'L',group:'유동자산 · 당좌자산',name:'예금 (금융상품)',art:'§15, §7②3',base:'실질',alt:['부실','겸업'],
+ sum:'기준일 포함 30일 평균잔액으로 평가(기준일 잔액 초과 불가) · 증빙은 60일 거래실적증명',chips:['30일 평균','60일 증빙'],links:[1,6],
+ sec:S(['진단받는 자 명의로 예치한 장·단기 금융상품 — 요구불·정기예금·정기적금·증권예탁금 등 (§15①)','평가액 = 기준일 포함 30일 은행거래실적 평균잔액, 단 기준일 현재 잔액 초과 불가 (§15②1)','신설법인은 평가기간을 기준일~진단일 전일로 (§15②2)','기준일 현재 실질자산을 예금으로 회수했거나, 기준일 후 실질자산 취득·실질부채 상환으로 인출한 경우 가감하여 평균잔액 계산 가능 (§15②3)'],
+  ['기준일 현재 예금잔액증명 + 기준일 포함 60일간 은행거래실적증명 미제시 — 발급 불가 상품은 거래사실증명서로 갈음 가능 (§15③1)','부실·겸업자산을 회수하는 형식으로 입금 후 60일 이내 부실·겸업자산으로 출금된 경우 (§15③2)','허위·일시조달 예금 (§7②3)','※ 위 경우는 평균잔액 계산에서도 제외'],
+  ['질권 설정 등 사용·인출 제한 예금 — 평균잔액 계산에서 제외, 직접 관련 차입금은 겸업부채 (§15④)'],
+  ['기준일 현재 예금·차입금 있는 금융기관별 금융거래확인서 또는 전체 금융기관 신용정보조회서로 부외부채 유무 검토 (§15⑤)'])},
+
+{id:'sec',side:'L',group:'유동자산 · 당좌자산',name:'유가증권 (단기투자자산 등)',art:'§16, §7②7',base:'겸업',alt:['실질','부실'],
+ sum:'원칙적으로 겸업자산. 예외 3유형만 진단대상사업 자산으로 평가',chips:['예외 3유형','60일'],links:[2],
+ sec:S(['특정 건설사업 수행을 위해 계약상 취득한 특수목적법인 지분증권 → 취득원가 (§16②1, ③1)','진단대상사업 관련 공제조합 출자금 → 기준일 현재 시가 (§16②2, ③2)','한국금융투자협회 회원사 발급 잔고증명서를 제출한 유가증권 → 기준일 현재 시가 (§16②3, ③2)'],
+  ['잔고증명서 제출 유가증권이 기준일 이후 매도되어 입금된 후 60일 이내 부실·겸업자산으로 출금·유지된 경우 (§16③4)','실재하지 않거나 출처 불분명한 유가증권 · 무기명식 금융상품 (§13①3 가·나)','잔고증명서와 사실이 다르거나 시가 초과분 (§7②7)'],
+  ['위 3유형 외 모든 유가증권 (§16②)','잔고증명서 제출 유가증권이 사용·인출 제한이면 겸업자산, 직접 관련 차입금은 겸업부채 (§16③3)','비상장 주식 (§7②1)'])},
+
+{id:'recv',side:'L',group:'유동자산 · 당좌자산',name:'매출채권 (공사미수금·분양미수금)',art:'§17, §7②4',base:'실질',alt:['부실','겸업'],
+ sum:'대손충당금 차감 · 발생일로부터 2년 이상 경과한 받을채권은 부실 (예외 있음)',chips:['2년','건물 회수 2년'],links:[5,8],
+ sec:S(['공사미수금 + 분양미수금(세무자료 청구분 + 진행기준 계상분) − 대손충당금 (§17①)','세무자료 청구분 — 계약서·세금계산서·계산서·금융자료 회수내역 검토, 필요 시 채권조회 (§17②)','진행기준분 — 위에 더해 진행률 산정의 적정성 평가 (§17③)','2년 경과해도 인정: ① 국가·지자체·공공기관 채권(관련 부채는 §25로 차감 평가) ② 판결 등으로 금액 확정 또는 소송 진행 중인 채권 중 담보로 회수가능한 금액 (§17④)','매출채권을 건물(부속토지 포함)로 회수한 경우 취득일부터 2년간 (§17⑤)'],
+  ['발생일로부터 2년 이상 경과한 받을채권 (§17④)','소송·판결확정 채권: 담보 없으면 전액, 담보 있으면 회수가능금액 초과분 (§17④2)','장기성매출채권·부도어음·대손처리할 자산 (§7②1, §13①3바)'],
+  ['진단대상사업과 무관한 매출채권 (§17①)'],
+  ['진행기준으로 매출 계상 후 세무신고로 세무상 수입금액에서 제외한 매출채권 상당액은 실질자본에서 차감 (§13②2)'])},
+
+{id:'suspense',side:'L',group:'유동자산 · 당좌자산',name:'가지급금',art:'§19①, §13①3다',base:'부실',alt:[],
+ sum:'특수관계자 가지급금은 부실자산',chips:[],links:[],
+ sec:S([],['법인세법상 특수관계자에 대한 가지급금 (§19①)','가지급금·대여금 (§13①3다, §7②1)'],[],['§19①은 특수관계자 아닌 자에 대한 “대여금”만 겸업으로 규정 — 비특수관계자 가지급금의 처리는 지침에 명시 없음(요검토)'])},
+
+{id:'loan',side:'L',group:'유동자산 · 당좌자산',name:'대여금 (단기·장기)',art:'§19, §7②6',base:'부실',alt:['실질','겸업'],
+ sum:'특수관계자 대여금은 부실, 비특수관계자 대여금은 겸업, 종업원 주택자금 등은 실질 인정 가능',chips:[],links:[],
+ sec:S(['종업원 주택자금·우리사주조합 대여금 — 계약서·금융자료·주택취득 현황·조합 결산서로 실재성이 확인되고 재무상태·사회통념상 규모가 합리적인 경우 (§19②, §7②6)'],
+  ['법인세법상 특수관계자에 대한 대여금 (§19①)'],['특수관계자 아닌 자에 대한 대여금 (§19①)'])},
+
+{id:'miscrecv',side:'L',group:'유동자산 · 당좌자산',name:'미수금 · 미수수익',art:'§13①3라, §7②1·6',base:'부실',alt:['실질'],
+ sum:'미수금·미수수익은 부실. 미수금은 담보 가치·회수가능성 입증 시 실질 가능',chips:[],links:[],
+ sec:S(['장기성매출채권·미수금 — 담보 가치·회수가능성 입증서류로 확인 시 (§7②6)','이 지침의 다른 조항으로 실질자산 인정되는 것 (§13① 3호 괄호)'],
+  ['미수금·미수수익 (§13①3라, §7②1)'],[],['§17 표제가 “매출채권과 미수금등”이므로 ④의 2년 규정이 미수금에 미치는 범위는 원문 대조 필요','미수수익은 지침상 명시된 구제 예외 없음'])},
+
+{id:'prepay',side:'L',group:'유동자산 · 당좌자산',name:'선급금 · 선급공사원가',art:'§20, §13①3마',base:'부실',alt:['실질'],
+ sum:'계약서·금융자료와 진단일 현재 이행·진행상황으로 실재성 확인되는 4유형만 실질',chips:['4유형'],links:[],
+ sec:S(['① 계약서상 선급금 규정에 의한 선급금 중 기성금 미정산분','② 진단대상사업을 위해 입고 예정인 재료 구입대금 선지급분','③ 주택건설용지 취득 선지급분 (단, §23④에 따라 실질자산이 아닌 금액 제외)','④ 기업회계기준상 선급공사원가로 대체될 예정인 선급금'],
+  ['위 4유형 외 선급금 (§13①3마, §7②1)'],[],['별지 계정 “선급공사원가”는 별도 조문 없음 — ④가 연결고리'])},
+
+{id:'prepaidexp',side:'L',group:'유동자산 · 당좌자산',name:'선급비용',art:'§13①3마, §7②1',base:'부실',alt:[],
+ sum:'선급비용은 부실자산 (지침상 별도 구제 규정 없음)',chips:[],links:[],
+ sec:S([],['선급금·선납세금·선급비용 (§13①3마)'])},
+
+{id:'prepaidtax',side:'L',group:'유동자산 · 당좌자산',name:'선납세금 · 부가세선급금',art:'§13①3마, §7②6, §17⑥',base:'부실',alt:['실질'],
+ sum:'선납세금은 부실, 환급통보를 입증하면 실질. 국가·지자체 조세채권도 부실',chips:['환급통보'],links:[],
+ sec:S(['선납세금 — 환급통보 입증으로 확인 시 (§7②6)','국가·지자체 조세채권은 진단일 현재 환급 결정된 경우 부실 제외 (§17⑥)'],
+  ['선납세금 (§13①3마)','국가·지자체에 대한 조세채권 — 조세불복 중 포함 (§17⑥)'],[],['“부가세선급금”은 지침에 별도 규정 없음 — §17⑥ 적용 여부는 요검토'])},
+
+{id:'othercur',side:'L',group:'유동자산 · 당좌자산',name:'기타 당좌자산',art:'§12②',base:'규정없음',alt:[],
+ sum:'지침에 열거되지 않은 계정은 실질적 내용에 따라 판단',chips:[],links:[],sec:[]},
+
+/* 재고자산 */
+{id:'invmat',side:'L',group:'유동자산 · 재고자산',name:'원재료 · 가설재 등 원자재·유사 재고',art:'§18②, §7②5',base:'부실',alt:['실질'],
+ sum:'원칙 부실. 취득일부터 1년 이내 + 진단대상사업용 보유가 확인되면 실질',chips:['1년 이내'],links:[],
+ sec:S(['보유기간 취득일로부터 1년 이내이고, 종류·취득일자·취득사유·금융자료·현장일지·실사로 진단대상사업을 위해 보유함이 확인된 경우 (§18②)','증빙: 기본서류·거래명세서·현장일지 (§7②5)'],
+  ['위 요건 미충족 원자재 및 유사 재고 (§18②)'],[],['평가: 취득원가, 시가 하락 시 시가. 감정평가법인 감정가액이 있으면 시가로 봄 (§18①)','별지 계정 “가설재”가 “유사 재고”에 해당하는지는 지침에 명시 없음'])},
+
+{id:'invtree',side:'L',group:'유동자산 · 재고자산',name:'수목',art:'§18③',base:'실질',alt:['겸업'],
+ sum:'조경공사업·조경식재공사업 수목자산은 보유기간 불문 실질 (확인 요건 충족 시)',chips:['보유기간 불문'],links:[],
+ sec:S(['조경공사업·조경식재공사업 수목자산 — 종류·취득일자·취득사유·금융자료·현장일지·실사로 확인 시 (§18③, ②단서 방식)'],[],['진단대상사업과 직접 관련 없는 재고자산 (§18④)'])},
+
+{id:'invhouse',side:'L',group:'유동자산 · 재고자산',name:'용지 · 미완성주택 · 완성주택 (판매용 신축)',art:'§18③·④, §7②5',base:'실질',alt:['겸업'],
+ sum:'판매 목적 신축용 자산은 “시공한 경우에 한해” 보유기간 불문 실질. 부동산매매업 재고는 겸업',chips:['시공한 경우에 한함'],links:[],
+ sec:S(['주택·상가·오피스텔 등 진단대상사업과 연관되고 판매 목적의 신축용 자산 — 시공한 경우에 한함, 보유기간 불문 (§18③)','증빙: 기본서류·공사원가명세서·분양내역서 (§7②5)'],[],
+  ['진단대상사업과 직접 관련 없는 재고자산 (§18④)','부동산매매업 재고자산 (§18④)'])},
+
+{id:'invwip',side:'L',group:'유동자산 · 재고자산',name:'미성공사',art:'§7②5',base:'실질',alt:[],
+ sum:'단기공사현장 미성공사는 기본서류·공사원가명세서로 실재성 인정 시 실질',chips:[],links:[],
+ sec:S(['단기공사현장 미성공사 — 기본서류·공사원가명세서로 실재성이 인정되는 경우 (§7②5)'],[],[],['§18에는 미성공사 별도 조문이 없고 §7②5에 근거'])},
+
+/* 비유동자산 */
+{id:'invest',side:'L',group:'비유동자산',name:'투자자산 · 기타 비유동자산',art:'§22, §7②1',base:'겸업',alt:['부실'],
+ sum:'이 지침에서 따로 정하지 않은 투자자산·기타 비유동자산은 모두 겸업자산',chips:[],links:[],
+ sec:S([],['무기명식 금융상품 · 출처 불분명 유가증권 (§13①3 가·나)'],['이 지침에서 따로 정하지 않은 투자자산과 기타 비유동자산 (§22)','비상장 주식 (§7②1)'])},
+
+{id:'tangible',side:'L',group:'비유동자산',name:'유형자산 (토지·건물 등)',art:'§23, §7②8·10',base:'실질',alt:['부실','겸업'],
+ sum:'소유권·실재성·진단대상사업 관련성 평가 · 임대·운휴자산은 겸업 (임대면적 비율), 본사 업무용 임대건물은 실질',chips:['임대면적 비율'],links:[3,7],
+ sec:S(['소유권·실재성·진단대상사업 관련성 종합 평가 (§23②)','감가상각누계액 = 취득일~기준일 법인세법 기준내용연수·정액법 금액, 단 장부상 누계액이 더 크면 그 금액 (§23③)','취득원가모형·재평가모형 중 회계장부 반영 방식 (§23③)','본사 업무용 건축물(부속토지 포함)이 임대자산이면 실질자산 (§23⑥ 단서)'],
+  ['등기·등록대상 자산으로 법적·실질적 소유권이 없는 경우 (§23②)','진단받는 자가 법적·실질적으로 소유하지 않은 자산 (§13①2)'],
+  ['임대자산·운휴자산 등 진단대상사업과 무관한 유형자산 (§23⑥)','토지·건물 일부 임대 시 전체 연면적 대비 임대면적 비율만큼 (§23⑥)'],
+  ['토지·건물 등기부등본으로 부외부채 평가 (§23⑤)','임대자산에 대한 본인·타인 명의 부채(담보 제공 시 채권최고액)는 실질부채 (§23⑥ 단서)'])},
+
+{id:'cip',side:'L',group:'비유동자산',name:'건설중인자산',art:'§23④',base:'실질',alt:['부실'],
+ sum:'계약서·금융자료·회계장부로 확인 · 계약일부터 1년 초과 시 소명 필요',chips:['1년 초과'],links:[],
+ sec:S(['계약서·금융자료·회계장부로 확인되는 자산 (§23④)'],
+  ['실재하지 않는 계약','진단일 현재 계약일로부터 1년 초과로 사유를 객관적으로 소명할 수 없는 경우','진단일까지 계약이 해제되어 불입금액이 예금으로 환입된 후 일부·전부가 부실·겸업자산으로 출금·유지된 경우 (이상 §23④)'])},
+
+{id:'intang',side:'L',group:'비유동자산',name:'무형자산',art:'§24, §7②11',base:'부실',alt:['실질'],
+ sum:'원칙 부실. 진단대상사업과 직접 관련하여 취득한 3유형은 상각 차감 후 평가',chips:['3유형'],links:[],
+ sec:S(['시설물 기부채납 후 일정기간 무상 사용수익권 → 정액법 상각 차감 평가 (수증자 확인서·세무신고 자료, §7②11)','산업재산권 → 취득원가에서 정액법 상각 차감 (인허가기관 확인서, §7②11)','부동산물권 → §21①·§23②에 준함 (§24)'],
+  ['위 3유형 외 무형자산 (§24, §13①3사)'])},
+
+{id:'guar',side:'L',group:'비유동자산',name:'보증금 (임차·사업수행·공탁금)',art:'§21, §7②9',base:'실질',alt:['부실','겸업'],
+ sum:'임차보증금은 4가지 부실 사유 · 직접 제공되지 않은 임차보증금은 겸업',chips:[],links:[],
+ sec:S(['임차보증금 — 임대차계약서·금융자료·확정일자·임대인 세무신고서·시가자료로 평가 (§21①)','진단대상사업 수행 중 예치한 보증금 — 계약서·금융자료·보증기관 보관증·진행상황 종합 판단 (§21②)','법원 공탁금 — 진단일 현재 소송결과 등을 반영한 회수가능금액 (§21③)'],
+  ['임차보증금 중: ① 거래 실재성 없음 ② 임차목적물이 부동산 아님(리스사업자와의 리스보증금 제외) ③ 임차부동산이 본점·지점·사업장 소재지 및 인접지역이 아니거나 임직원용 주택 ④ 시가 초과분 (§21①)','사업수행 보증금: 보증기간 만료 후 회수 지체 시 회수가능금액, 소송 계속 중이면 소송금액 총액 차감 (§21②)'],
+  ['진단대상사업에 직접 제공되지 않는 임차보증금 (§21④)'])},
+
+{id:'ltrecv',side:'L',group:'비유동자산',name:'장기성매출채권 · 부도어음',art:'§7②1·6, §13①3바',base:'부실',alt:['실질'],
+ sum:'부실. 담보 가치·회수가능성을 입증서류로 확인하면 실질 가능 (장기성매출채권)',chips:[],links:[],
+ sec:S(['장기성매출채권 — 담보 가치·회수가능성 입증서류로 확인 시 (§7②6)'],['부도어음·장기성매출채권·대손처리할 자산 (§13①3바, §7②1)'])},
+
+/* 겸업자산 */
+{id:'gen_biz',side:'L',group:'겸업자산 (진단대상사업 실질자산에서 차감)',gcls:'biz',name:'겸업자산 구성',art:'§3, §28, 별지 제2호',base:'겸업',alt:[],
+ sum:'열거 겸업자산 + 겸업사업 제공 자산 + (공통 사용 자산 × 겸업비율)',chips:['Ⅲ = Ⅰ − 겸업자산'],links:[9],
+ sec:S([],[],
+  ['비상장 주식 (§7②1)','임대·운휴 중인 자산 — 임대면적 비율 (§7②1, §23⑥)','사용·인출 제한 예금 (§15④)','§16② 3유형 외 유가증권 · 사용제한 유가증권 (§16)','진단대상사업과 무관한 매출채권 (§17①)','특수관계자 아닌 자에 대한 대여금 (§19①)','진단대상사업과 직접 관련 없는 재고 · 부동산매매업 재고 (§18④)','진단대상사업에 직접 제공되지 않는 임차보증금 (§21④)','이 지침에서 따로 정하지 않은 투자자산·기타 비유동자산 (§22)'],
+  ['겸업자산 = 겸업사업에 제공된 자산 + 겸업자산으로 열거한 자산 + (진단대상사업과 겸업사업 공통 사용 자산 × 겸업비율) (별지 제2호)','산정 순서: ① 열거 겸업자산·직접 관련 부채 → ② 상시 구분경리로 실지귀속 → ③ 공통자산·부채는 해당 회계연도 사업별 수입금액 비율(수입금액 없으면 사용면적·종업원 수 등 합리적 방식) (§28)'])},
+
+/* ---------- 우: 부채·자본 ---------- */
+{id:'liab',side:'R',group:'실질부채 (유동·비유동)',name:'부채 평가 총칙',art:'§25①, §7①2',base:'실질',alt:[],
+ sum:'발생사유를 공사원가·비용 발생·관련 자산 규모와 비교 분석해 적정성과 부외부채 유무 평가',chips:[],links:[5],
+ sec:S([],[],[],['입증서류(§7①2): 계정명세서 · 신용정보조회서 또는 금융기관별 금융거래확인서 · 공제조합 등 보증가능금액확인서 발급기관의 융자확인서','국가·지자체·공공기관 채권(2년 경과 예외)의 관련 부채는 §25에 따라 차감 평가 (§17④1)'])},
+
+{id:'offbal',side:'R',group:'실질부채 (유동·비유동)',name:'부외부채 확인',art:'§7③, §13②4, §25②',base:'차감',alt:[],
+ sum:'장부에 없는 차입금·미지급세금 등을 찾아 실질자본에서 차감. 지침은 개념 정의 없이 확인 방법과 처리만 규정',chips:['3가지 방법','실질자본 차감'],links:[6,7],
+ sec:[{k:'bad',t:'처리',items:['입증서류 확인 결과 차입금 등 부외부채가 있으면 해당 금액을 실질자본에서 차감 (§7③)','자산의 과대평가 등에 따른 가공자산이나 부채를 누락한 부외부채 금액은 진단대상사업 실질자본에서 차감 (§13②4)']},
+       {k:'info',t:'먼저 비교 분석',items:['부채는 발생사유를 공사원가, 비용의 발생 및 관련 자산의 규모 등과 비교 분석하여 적정성 및 부외부채의 유무를 평가 (§25①)']},
+       {k:'info',t:'찾는 방법 3가지',items:['① 예금이 예치되거나 차입금이 있는 금융기관별 금융거래확인서, 또는 전체 금융기관에 대한 신용정보조회서를 발급받아 제출 → 진단자가 부외부채 유무 검토 (§25②1)','② 은행거래실적증명(§15③, 60일)과 같은 기간 동안 지급한 부채내역을 제출받아 기준일 현재 부외부채 유무 확인 (§25②2)','③ 기준일 현재 과세기간이 종료한 세무신고에 대해 진단일까지 신고한 세무신고서를 제출받아 미지급세금 등 확인 (§25②3)']},
+       {k:'info',t:'계정별 확인 경로',items:['예금: 금융기관별 금융거래확인서 또는 전체 금융기관 신용정보조회서 (§15⑤)','토지·건물: 등기부등본으로 부외부채 평가 (§23⑤)','유형자산: 담보대출이나 임대보증금 유무 확인 (§7②8)','부채 입증서류: 계정명세서, 신용정보조회서 또는 금융기관별 금융거래확인서, 공제조합 등 보증가능금액확인서 발급기관의 융자확인서 (§7①2)']},
+       {k:'info',t:'참고',items:['지침은 부외부채의 개념·유형을 따로 정의하지 않고 “차입금 등”, “미지급세금 등”을 예시로 확인 방법만 규정','별지 제1호 산식의 부채증가(ⅴ)로 반영하는지, 실질자본에서 직접 차감하는지는 지침에 명시 없음 (§7③·§13②는 “차감”으로 표현)']}]},
+
+{id:'prov',side:'R',group:'실질부채 (유동·비유동)',name:'충당부채',art:'§25③',base:'실질',alt:[],
+ sum:'퇴직급여·보증채무는 기업회계기준, 하자보수·공사손실은 장부 계상액',chips:[],links:[],
+ sec:[{k:'info',t:'평가',items:['퇴직급여충당부채 — 기업회계기준','하자보수충당부채 · 공사손실충당부채 — 장부 계상 시 그 금액','보증채무 충당부채 — 기업회계기준']}]},
+
+{id:'rentliab',side:'R',group:'실질부채 (유동·비유동)',name:'임대 본사건물 관련 부채',art:'§23⑥ 단서',base:'실질',alt:[],
+ sum:'본사 업무용 임대건물이 실질자산이면 그 건물의 본인·타인 명의 부채도 실질부채',chips:['채권최고액'],links:[3],
+ sec:[{k:'info',t:'평가',items:['해당 임대자산에 대한 본인 또는 타인 명의 부채는 실질부채 — 담보 제공 시 채권최고액 (§23⑥ 단서)']}]},
+
+{id:'bizliab',side:'R',group:'겸업부채',gcls:'biz',name:'겸업부채',art:'§3⑤, §15④, §16③3, 별지 제2호',base:'겸업',alt:[],
+ sum:'겸업자산과 직접 관련된 부채 + 겸업사업에 제공된 부채 + (공통 부채 × 겸업비율)',chips:['Ⅳ = Ⅱ − 겸업부채'],links:[1,2,9],
+ sec:S([],[],['겸업자산과 직접 관련된 부채 · 겸업사업에 제공된 부채 (§3 5호)','사용·인출 제한 예금과 직접 관련된 차입금 (§15④)','사용·인출 제한 유가증권과 직접 관련된 차입금 (§16③3)','공통 발생 부채 × 겸업비율 (별지 제2호, §28)'],['진단대상사업 실질부채 = 실질부채 − 겸업부채 (§3 8호)'])},
+
+{id:'paidin',side:'R',group:'자본',name:'납입자본금',art:'§26①',base:'실질',alt:[],
+ sum:'법인등기사항으로 등기된 자본금',chips:[],links:[],sec:[]},
+
+{id:'retained',side:'R',group:'자본',name:'이익잉여금 등',art:'§26②',base:'차감',alt:[],
+ sum:'적법한 세무신고 없이 장부상 증액한 자본은 실질자본에서 직접 차감',chips:[],links:[],sec:[]},
+
+{id:'bizcap',side:'R',group:'자본',name:'겸업자본',art:'§3⑥, §28, §29',base:'겸업',alt:[],
+ sum:'겸업자본 = 겸업자산 − 겸업부채 · 기준자본액이 정해진 겸업사업은 미달 시 기준자본액으로 간주',chips:[],links:[],
+ sec:[{k:'info',t:'산정',items:['겸업자본 = 겸업자산 − 겸업부채 (§3 6호)','기준자본액이 정해진 겸업사업의 겸업자본이 기준자본액에 미달하면 기준자본액을 겸업자본으로 봄 (§28)']},
+       {k:'info',t:'신규등록 (§29)',items:['겸업사업자의 신규등록 신청 시 진단대상업종 납입자본액으로 인정: ① 등록기준 자본액을 유상·무상 증자 (증자일 현재 완전자본잠식 제외) ② 등록기준 자본액 이상 자본금 보유 + 주총·이사회 결의로 동액 이상 이익잉여금을 진단대상업종을 위해 유보','증자액·유보액은 별도 예금으로 예치하고 그 예금은 §15에 따라 평가 (§29②)']}]},
+
+{id:'d1',side:'R',group:'진단조정 · 실질자본에서 차감 (§13②)',gcls:'red',name:'부실자산과 임의 상계된 부채',art:'§13②1',base:'차감',alt:[],
+ sum:'부실자산과 임의로 상계한 부채 상당액',chips:[],links:[4],sec:[]},
+{id:'d2',side:'R',group:'진단조정 · 실질자본에서 차감 (§13②)',gcls:'red',name:'세무상 제외한 진행기준 매출채권',art:'§13②2',base:'차감',alt:[],
+ sum:'진행기준으로 매출 계상 후 세무신고로 세무상 수입금액에서 제외한 매출채권 상당액',chips:[],links:[8],sec:[]},
+{id:'d3',side:'R',group:'진단조정 · 실질자본에서 차감 (§13②)',gcls:'red',name:'원가·비용 누락 분식결산',art:'§13②3',base:'차감',alt:[],
+ sum:'발생원가·비용을 누락한 분식결산 금액',chips:[],links:[],sec:[]},
+{id:'d4',side:'R',group:'진단조정 · 실질자본에서 차감 (§13②)',gcls:'red',name:'가공자산 · 부외부채',art:'§13②4',base:'차감',alt:[],
+ sum:'자산 과대평가 등 가공자산 및 부채를 누락한 부외부채 금액',chips:[],links:[],sec:[]}
+];
+
+
+/* ===================== 렌더 ===================== */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const state = {f:'all', q:'', sel:null, fs:1, oopen:new Set()};
+const FS = [14.5,16,17.5,19];
+const REF_RE = /\s*\(((?:이상\s)?§[^()]*)\)\s*$/;
+const cls = t=>'t-'+(TAGCLS[t]||'none');
+const byId = id=>ROWS.find(r=>r.id===id);
+
+function hl(str){
+  const q = state.q.trim();
+  if(!q) return esc(str);
+  const lo=str.toLowerCase(), ql=q.toLowerCase();
+  let out='', i=0, j;
+  while((j=lo.indexOf(ql,i))>-1){ out+=esc(str.slice(i,j))+'<mark>'+esc(str.slice(j,j+q.length))+'</mark>'; i=j+q.length; }
+  return out+esc(str.slice(i));
+}
+const tag = (t,base)=>`<span class="tag ${base?'base':'alt'} ${cls(t)}">${t}</span>`;
+function liHTML(s){
+  const m=s.match(REF_RE), body=m?s.slice(0,m.index):s;
+  return `<li>${hl(body)}${m?`<span class="ref">${hl(m[1])}</span>`:''}</li>`;
+}
+const secHTML = r=>r.sec.map(s=>`<div class="sec ${s.k}"><div class="sec-h">${esc(s.t)}</div><ul>${s.items.map(liHTML).join('')}</ul></div>`).join('');
+
+function groupKind(name,c){
+  if(c==='biz') return 'biz';
+  if(c==='red') return name.startsWith('부실')?'dead':'cut';
+  return 'plain';
+}
+
+/* ---------- 타일 지도 ---------- */
+function tileHTML(r){
+  const alts = r.alt.length ? `<span class="alts">${r.alt.map(a=>`<span class="dot ${cls(a)}" title="경우에 따라 ${a}"></span>`).join('')}</span>` : '';
+  const lk = r.links.length ? `<span class="lkm" title="자산↔부채 연결">⇄ ${r.links.length>1?r.links.length:r.links[0]}</span>` : '';
+  const ch = r.chips.length ? `<span class="ch">${r.chips.map(c=>`<span>${esc(c)}</span>`).join('')}</span>` : '';
+  return `<button class="tile ${cls(r.base)}" data-id="${r.id}" aria-label="${esc(r.name)} — 기본 ${r.base}">
+    <span class="t1">${tag(r.base,true)}${alts}${lk}</span>
+    <span class="nm">${esc(r.name)}</span><span class="sm">${esc(r.sum)}</span>${ch}
+    <span class="ar">${esc(r.art)}</span>
+  </button>`;
+}
+function buildMap(){
+  ['L','R'].forEach(side=>{
+    const groups=[];
+    ROWS.filter(r=>r.side===side).forEach(r=>{
+      let g=groups.find(x=>x.name===r.group);
+      if(!g){ g={name:r.group,cls:r.gcls||'',rows:[]}; groups.push(g); }
+      g.rows.push(r);
+    });
+    $('#body'+side).innerHTML = groups.map(g=>
+      `<div class="group k-${groupKind(g.name,g.cls)}"><div class="gh">${esc(g.name)}<small>${g.rows.length}</small></div><div class="tiles">${g.rows.map(tileHTML).join('')}</div></div>`).join('');
+    $('#n'+side).textContent = ROWS.filter(r=>r.side===side).length+'개 계정';
+  });
+  ROWS.forEach(r=>{
+    r.el = document.querySelector(`.tile[data-id="${r.id}"]`);
+    r.tags=[r.base,...r.alt];
+    r.text=(r.name+' '+r.art+' '+r.sum+' '+r.chips.join(' ')+' '+r.sec.map(s=>s.items.join(' ')).join(' ')).toLowerCase();
+  });
+  document.querySelectorAll('.cat').forEach(b=>{
+    b.querySelector('em').textContent = ROWS.filter(r=>r.tags.includes(b.dataset.f)).length+'개';
+  });
+}
+
+function matches(r){
+  const q=state.q.trim().toLowerCase();
+  return (state.f==='all'||r.tags.includes(state.f)) && (!q||r.text.includes(q));
+}
+function applyState(){
+  const active = state.f!=='all' || state.q.trim();
+  let n=0;
+  ROWS.forEach(r=>{ const m=matches(r); if(m) n++; r.el.classList.toggle('dim', !!active && !m); });
+  document.querySelectorAll('.cat').forEach(b=>b.setAttribute('aria-pressed', b.dataset.f===state.f));
+  document.querySelectorAll('[data-fbtn]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.fbtn===state.f));
+  $('#hint').innerHTML = active
+    ? `<span class="st">${n}개 계정 일치</span> <span>(나머지는 흐리게 표시)</span> <button class="reset" id="reset">필터 초기화</button>`
+    : `<span class="st">타일을 누르면 상세가 열립니다</span>
+       <span class="mini"><span class="dot t-real" style="--tc:var(--muted)"></span> 점 = 경우에 따라 바뀔 수 있는 분류</span>
+       <span><b>⇄</b> = 자산↔부채 연결 (올리면 짝이 점선 테두리와 연결선으로 표시)</span>
+       <span class="keys"><b>←</b> <b>→</b> 키로 계정 이동 · <b>/</b> 검색 · <b>Esc</b> 닫기</span>`;
+  if(state.sel) renderDrawer();
+}
+
+/* ---------- 연결(짝) 강조 ---------- */
+function setPairs(id){
+  document.querySelectorAll('.tile.pair').forEach(e=>e.classList.remove('pair'));
+  state.act = id || null;
+  const r = id && byId(id);
+  if(r && r.links.length) ROWS.forEach(o=>{ if(o!==r && o.links.some(n=>r.links.includes(n))) o.el.classList.add('pair'); });
+  drawLinks();
+}
+function drawLinks(){
+  const svg=$('#links'); if(!svg) return;
+  svg.innerHTML='';
+  const r = state.act && byId(state.act);
+  if(!r || !r.links.length) return;
+  const mr=$('#map').getBoundingClientRect(), a=r.el.getBoundingClientRect();
+  const mid=b=>b.top+b.height/2-mr.top;
+  let out='';
+  ROWS.forEach(o=>{
+    if(o===r || !o.links.some(n=>r.links.includes(n))) return;
+    const b=o.el.getBoundingClientRect();
+    let x1,x2,c1,c2;
+    const dx=(b.left+b.width/2)-(a.left+a.width/2);
+    if(Math.abs(dx)>Math.max(a.width,b.width)*0.6){
+      const right=dx>0;
+      x1=(right?a.right:a.left)-mr.left; x2=(right?b.left:b.right)-mr.left;
+      const k=Math.abs(x2-x1)*0.5; c1=x1+(right?k:-k); c2=x2+(right?-k:k);
+    } else {
+      x1=a.right-mr.left; x2=b.right-mr.left; c1=x1+46; c2=x2+46;
+    }
+    const y1=mid(a), y2=mid(b);
+    const d=`M${x1} ${y1} C${c1} ${y1} ${c2} ${y2} ${x2} ${y2}`;
+    out+=`<path class="halo" d="${d}"/><path d="${d}"/><circle cx="${x1}" cy="${y1}" r="4"/><circle cx="${x2}" cy="${y2}" r="4"/>`;
+  });
+  svg.innerHTML=out;
+}
+
+/* ---------- 상세 패널 ---------- */
+function drawerHTML(r){
+  const idx=ROWS.indexOf(r)+1;
+  const decide = `<div class="decide"><span class="g">기본 분류 ${tag(r.base,true)}</span>${r.alt.length?`<span class="g">경우에 따라 ${r.alt.map(a=>tag(a,false)).join('')}</span>`:''}</div>`;
+  const chips = r.chips.length ? `<div class="dchips">${r.chips.map(c=>`<span>${hl(c)}</span>`).join('')}</div>` : '';
+  const lks = r.links.length ? `<div class="lks"><h3>⇄ 연결된 계정</h3>${r.links.map(n=>{
+    const peers = ROWS.filter(o=>o!==r && o.links.includes(n));
+    return `<div class="lkc"><div class="h"><i>⇄ ${n}</i>자산↔부채 연결</div><p>${esc(LINKS[n])}</p><div class="peers">${peers.map(p=>`<button class="${cls(p.base)}" data-open="${p.id}">${esc(p.name)} →</button>`).join('')}</div></div>`;
+  }).join('')}</div>` : '';
+  const body = r.sec.length ? secHTML(r) : '<div class="sec info"><div class="sec-h">참고</div><ul><li>지침에 이 계정만의 별도 요건·예외 규정이 없습니다. 실질적 내용에 따라 판단합니다 (§12②).</li></ul></div>';
+  return `<div class="dr-head ${cls(r.base)}">
+      <div class="dr-nav"><span class="pos">${idx} / ${ROWS.length}</span>
+        <button data-nav="-1" aria-label="이전 계정">‹</button><button data-nav="1" aria-label="다음 계정">›</button><button data-close aria-label="닫기">✕</button></div>
+      <div class="dr-group">${esc(r.group)}</div>
+      <h2>${hl(r.name)}</h2><span class="dr-art">${hl(r.art)}</span>
+    </div>
+    <div class="dr-body" id="drbody"><p class="dr-sum">${hl(r.sum)}</p>${decide}${quizBtn(r)}${chips}${body}${lks}${origHTML(r)}</div>`;
+}
+function renderDrawer(keepScroll){
+  const r=byId(state.sel); if(!r) return;
+  const old=$('#drbody'), st=old?old.scrollTop:0;
+  $('#drawer').innerHTML = drawerHTML(r);
+  if(keepScroll && $('#drbody')) $('#drbody').scrollTop = st;
+}
+function openRow(id, focus){
+  if(state.sel!==id) state.oopen=new Set();
+  state.sel=id;
+  document.querySelectorAll('.tile.sel').forEach(e=>e.classList.remove('sel'));
+  const r=byId(id); r.el.classList.add('sel');
+  renderDrawer();
+  $('#drbody').scrollTop = 0;
+  $('#drawer').classList.add('on'); $('#drawer').setAttribute('aria-hidden','false');
+  document.body.classList.add('dr');
+  setPairs(id);
+  // 가려지는 타일을 보이게
+  const rc=r.el.getBoundingClientRect(), tbh=$('#topbar').offsetHeight;
+  if(rc.top<tbh+10 || rc.bottom>innerHeight-10) r.el.scrollIntoView({block:'center',behavior:'smooth'});
+  if(focus) setTimeout(()=>{ const c=$('#drawer [data-close]'); c&&c.focus({preventScroll:true}); },60);
+}
+function closeDrawer(){
+  const id=state.sel; state.sel=null;
+  document.querySelectorAll('.tile.sel').forEach(e=>e.classList.remove('sel'));
+  $('#drawer').classList.remove('on'); $('#drawer').setAttribute('aria-hidden','true');
+  document.body.classList.remove('dr');
+  setPairs(null);
+  if(id){ const r=byId(id); r&&r.el.focus({preventScroll:true}); }
+}
+function nav(d){
+  if(!state.sel) return;
+  const i=(ROWS.findIndex(r=>r.id===state.sel)+d+ROWS.length)%ROWS.length;
+  openRow(ROWS[i].id, false);
+}
+
+/* ---------- 인쇄용 전체 목록 ---------- */
+function buildPrint(){
+  let out='', last='';
+  ROWS.forEach(r=>{
+    if(r.side+r.group!==last){ out+=`<h3>${r.side==='L'?'자산':'부채·자본'} · ${esc(r.group)}</h3>`; last=r.side+r.group; }
+    out+=`<div class="pg ${cls(r.base)}"><h4>${esc(r.name)} ${tag(r.base,true)}${r.alt.map(a=>tag(a,false)).join('')}<span class="ref">${esc(r.art)}</span></h4><p class="sm">${esc(r.sum)}</p>${secHTML(r)}</div>`;
+  });
+  $('#printdoc').innerHTML=out;
+}
+
+/* ===================== 이벤트 ===================== */
+document.addEventListener('click',e=>{
+  const qo=e.target.closest('[data-quiz]'); if(qo){ openQuiz(qo.dataset.quiz); return; }
+  const oc=e.target.closest('[data-oart]'); if(oc){ const n=+oc.dataset.oart; state.oopen.has(n)?state.oopen.delete(n):state.oopen.add(n); renderDrawer(true); return; }
+  const t=e.target.closest('.tile'); if(t){ openRow(t.dataset.id,true); return; }
+  const o=e.target.closest('[data-open]'); if(o){ openRow(o.dataset.open,false); return; }
+  if(e.target.closest('[data-close]')||e.target.closest('#scrim')){ closeDrawer(); return; }
+  const n=e.target.closest('[data-nav]'); if(n){ nav(+n.dataset.nav); return; }
+  const fb=e.target.closest('[data-fbtn]'); if(fb){ state.f = state.f===fb.dataset.fbtn ? 'all' : fb.dataset.fbtn; applyState(); return; }
+  const st=e.target.closest('#sumTgl'); if(st){ const on=document.body.classList.toggle('nosum'); st.setAttribute('aria-pressed',!on); drawLinks(); return; }
+  const c=e.target.closest('.cat'); if(c){ state.f = state.f===c.dataset.f ? 'all' : c.dataset.f; applyState(); return; }
+  if(e.target.closest('#reset')){ state.f='all'; state.q=''; $('#q').value=''; applyState(); }
+});
+document.addEventListener('mouseover',e=>{ const t=e.target.closest('.tile'); if(t) setPairs(t.dataset.id); });
+document.addEventListener('mouseout',e=>{ if(e.target.closest('.tile')) setPairs(state.sel); });
+document.addEventListener('focusin',e=>{ const t=e.target.closest('.tile'); if(t) setPairs(t.dataset.id); });
+document.addEventListener('focusout',e=>{ if(e.target.closest('.tile')) setPairs(state.sel); });
+document.addEventListener('keydown',e=>{
+  const typing = e.target.matches('input,textarea');
+  if(e.key==='/' && !typing && !document.querySelector('dialog[open]')){ e.preventDefault(); $('#q').focus(); }
+  else if(e.key==='Escape' && !document.querySelector('dialog[open]')){
+    if(typing && $('#q').value){ $('#q').value=''; state.q=''; applyState(); }
+    else if(state.sel) closeDrawer();
+  }
+  else if(!typing && state.sel && (e.key==='ArrowRight'||e.key==='ArrowLeft')){ e.preventDefault(); nav(e.key==='ArrowRight'?1:-1); }
+});
+$('#q').addEventListener('input',e=>{ state.q=e.target.value; applyState(); });
+
+function applyFs(){
+  document.documentElement.style.fontSize=FS[state.fs]+'px';
+  $('#fsMinus').disabled=state.fs<=0; $('#fsPlus').disabled=state.fs>=FS.length-1;
+  try{ localStorage.setItem('gidan-fs2',state.fs); }catch(_){}
+  measure();
+}
+$('#fsMinus').addEventListener('click',()=>{ if(state.fs>0){state.fs--;applyFs();} });
+$('#fsPlus').addEventListener('click',()=>{ if(state.fs<FS.length-1){state.fs++;applyFs();} });
+function measure(){ document.documentElement.style.setProperty('--tb',$('#topbar').offsetHeight+'px'); }
+
+try{ const v=localStorage.getItem('gidan-fs2'); if(v!==null && +v>=0 && +v<FS.length) state.fs=+v; }catch(_){}
+
+/* ===================== 원문 보기 (별지 2 원문) ===================== */
+const ART = {"1":{"t":"목 적","p":[{"m":"","h":"이 지침은 영 제9조에 따른 재무관리상태의 진단을 실시함에 있어 진단자의 진단에 통일성과 객관성을 부여하기 위하여 필요한 사항을 규정함을 목적으로 한다.","i":[]}]},"2":{"t":"적용범위","p":[{"m":"①","h":"①이 지침은 영 제13조에 따른 건설업 등록기준중 사업자의 실질자본에 대한 진단에 관하여 적용한다.","i":[]},{"m":"②","h":"②진단을 실시함에 있어 이 지침에서 정하는 사항 및 다른 법령에 특별한 규정이 있는 경우를 제외하고는 기업회계기준에 따른다. 이 경우 “기업회계기준”이란 한국회계기준원 회계기준위원회가 공표하여 진단기준일 현재 시행하고 있는 회계기준을 말한다.","i":[]}]},"3":{"t":"정의","p":[{"m":"","h":"이 지침에서 사용하는 용어의 뜻은 다음과 같다.","i":["1. “실질자산”이란 회사제시자산에서 이 지침에 따른 수정사항과 부실자산을 반영한 후의 금액을 말한다.","2. “실질부채”란 회사제시부채에서 이 지침에 따른 수정사항을 반영한 후의 금액을 말한다.","3. “겸업사업”이란 재무관리상태의 진단대상이 되는 사업 이외의 사업을 말한다. 이 경우 법인등기사항 등 형식적인 사업목적에 불구하고 그 실질적 사업내용에 따라 적용한다.","4. “겸업자산”이란 이 지침에서 겸업자산으로 열거한 자산과 겸업사업을 위하여 제공된 자산을 말한다.","5. “겸업부채”란 겸업자산과 직접 관련된 부채와 겸업사업에 제공된 부채를 말한다.","6. “겸업자본”이란 겸업자산에서 겸업부채를 차감한 금액을 말한다.","7. “진단대상사업 실질자산”이란 실질자산에서 겸업자산을 차감한 금액을 말한다.","8. “진단대상사업 실질부채”란 실질부채에서 겸업부채를 차감한 금액을 말한다.","9. “진단대상사업 실질자본”이란 진단대상사업의 실질자산에서 진단대상사업의 실질부채를 차감한 금액으로서 진단대상이 되는 사업의 실질자본을 말한다."]}]},"4":{"t":"진단자","p":[{"m":"","h":"진단자는 법 제49조제2항에 따른 공인회계사(「공인회계사법」제7조에 따라 금융위원회에 등록한 개업 공인회계사 및 같은 법 제24조에 따라 등록한 회계법인을 말한다), 세무사(「세무사법」제6조에 따라 등록한 세무사 및 같은 법 제16조의4에 따라 등록한 세무법인을 말한다) 또는 전문경영진단기관으로 한다.","i":[]}]},"5":{"t":"진단의 기준일","p":[{"m":"①","h":"①신규신청(건설업종 추가 등록을 위한 신청을 포함한다)의 경우 진단기준일은 등록신청일이 속하는 달의 직전월 마지막 날로 한다. 다만, 신설법인의 경우에는 설립등기일을 진단기준일로 한다.","i":[]},{"m":"②","h":"②등록사항의 주기적 신고의 경우 진단기준일은 등록사항의 주기적 신고를 하는 날이 속하는 회계연도의 직전 회계연도 결산일로 한다. 이 경우 결산일이란 법인인 경우 정관에서 정한 회계기간의 말일인 연차결산일을 말하고, 개인인 경우 12월 31일을 말한다. 다만, 회계연도의 변경이 있는 경우는 「법인세법」에서 정하는 규정에 따른다.","i":[]},{"m":"③","h":"③사업의 양수․양도, 법인의 분할․분할합병․합병, 자본금 변경 등에 따른 기업진단의 경우에는 다음 각 호에서 정하는 날을 진단기준일로 한다.","i":["1. 양수․양도 : 양도․양수 계약일","2. 분할․분할합병․합병 : 분할․분할합병․합병 등기일","3. 자본금 변경 : 다음 각 목의 어느 하나에 해당하는 법인인 경우에는 자본금 변경등기일 가. 기존법인 : 업종별 등록기준 자본금이 강화된 경우 나. 신설법인 : 기준자본금이 미달되어 추가로 증자한 경우"]},{"m":"④","h":"④당해 등록․신고수리관청이 실태조사 등의 목적에 의하여 기업진단을 실시하는 경우에는 당해 등록․신고수리관청이 지정하는 날을 진단기준일로 한다.","i":[]}]},"6":{"t":"재무제표와 진단 증빙 등","p":[{"m":"①","h":"①진단을 받고자 하는 자(이하 “진단을 받는 자”라 한다)는 기업회계기준에 따라 작성한 재무제표(진단기준일이 연차결산일인 경우에는 「법인세법」 및 「소득세법」에 따라 관할 세무서장에게 제출한 정기 연차결산 재무제표를 말한다), 공사원가명세서, 회계장부 및 진단자가 요구하는 입증서류를 작성 제출하거나 제시하여야 한다.","i":[]},{"m":"②","h":"②제1항에도 불구하고 외감법 제2조에 따라 외부감사를 받은 법인은 재무제표 대신에 해당 감사보고서를 제출하여야 하며, 그 외의 법인으로서 재무제표를 한국채택국제회계기준에 따라 작성한 법인은 재무제표 대신에 감사보고서를 제출하여야 한다.","i":[]},{"m":"③","h":"③제1항과 제2항에 따라 제출된 서류는 재작성 또는 정정 등을 이유로 반려를 요구하지 못한다. 다만, 이미 제출된 서류에 명백한 오류가 있는 경우에 한하여 진단자의 승인을 얻어 정정하거나 보완서류를 추가로 제출할 수 있다.","i":[]}]},"7":{"t":"실질자본에 대한 입증서류, 확인 및 평가 등","p":[{"m":"①","h":"①실질자본에 대한 입증서류는 다음 각 호와 같다.","i":["1. 실질자산을 확인하는 입증서류는 다음 각 목의 서류를 말한다. 가. 기본서류(계정명세서, 계약서, 금융자료, 세금계산서, 계산서, 정규영수증, 등기․등록서류 등을 말하며, 이하 같다) 나. 제2항 각 호에 따른 추가 증빙서류 다. 진단자가 제2장에 따라 각 계정의 평가를 위하여 필요하다고 판단하는 보완서류","2. 실질부채를 확인하는 입증서류는 계정명세서, 신용정보조회서 또는 금융기관별 금융거래확인서, 공제조합 등 보증가능금액확인서 발급기관의 융자확인서를 말한다."]},{"m":"②","h":"②실질자본에 대한 확인과 평가는 다음 각 호에 의한다.","i":["1. 계정명세서를 확인하여 무기명식 금융상품, 실재하지 않거나 출처가 불분명한 유가증권, 가지급금, 대여금, 미수금, 미수수익, 선급금, 선급비용, 선납세금, 재고자산, 부도어음, 장기성매출채권 및 무형자산은 부실자산으로 분류하고, 비상장 주식과 임대 또는 운휴 중인 자산은 겸업자산으로 분류한다. 다만, 이 지침의 다른 조항에 따라 실질자산으로 인정되는 것은 제외한다.","2. 회사가 제시한 자본총계의 100분의 1을 초과하는 현금은 부실자산으로 본다.","3. 예금은 진단기준일 현재의 예금잔액증명서와 진단기준일을 포함한 60일간의 거래실적증명을 확인하되 허위의 예금이나 일시적으로 조달된 예금으로 확인된 경우는 부실자산으로 분류하고, 사용이 제한된 예금은 겸업자산으로 분류한다.","4. 매출채권은 기본서류와 거래처원장을 비교하여 실재성(實在性) 및 적정성을 평가한다.","5.진단대상사업을 위한 재고자산으로서 원자재와 수목 등은 기본서류, 거래명세서, 현장일지로 확인하고, 단기공사현장의 미성공사는 기본서류, 공사원가명세서로 확인하며, 진단대상사업과 연관 있고 판매를 위한 신축용 재고자산은 기본서류, 공사원가명세서, 분양내역서 등으로 확인하여 실재성이 인정될 경우에는 실질자산으로 본다.","6. 종업원 주택자금과 우리사주조합에 대한 대여금은 기본서류 등으로 확인하고, 장기성매출채권과 미수금은 기본서류, 제공받은 담보의 가치와 회수가능성을 입증하는 서류로 확인하며, 선납세금은 환급통보 내역을 입증하는 서류로 확인하여 실재성이 입증될 경우에는 실질자산으로 본다.","7. 시장성있는 유가증권과 금융기관에 보관 중인 유가증권에 대해서는 금융기관의 잔고증명서를 확인하여 사실과 다르거나 시가를 초과하는 금액은 부실자산으로 본다.","8. 유형자산은 기본서류와 감가상각명세서를 통하여 소유권과 실재성 및 금액의 적정성을 평가하고 담보대출이나 임대보증금 유무를 확인한다.","9. 임차보증금은 기본서류, 임대인의 세무신고 자료 및 시가 조회자료를 통하여 평가하고, 그 밖의 보증금은 기본서류, 보증기관의 확인서나 보관증으로 확인하여 사실과 다르거나 시가를 현저히 초과한 금액은 부실자산으로 본다.","10. 부동산물권은 제9호에 준하여 확인한다.","11. 산업재산권은 기본서류와 인허가기관의 확인서로 평가하며 사용수익기부자산은 기본서류, 수증자의 확인서와 세무신고 자료를 통하여 평가한다."]},{"m":"③","h":"③실질부채를 확인하는 입증서류를 확인한 결과 차입금 등 부외부채가 있을 경우에는 실질자본에서 해당 금액을 차감하여야 한다.","i":[]},{"m":"④","h":"④제1항부터 제3항까지와 이 지침의 다른 규정에 따라 해당 자산 및 부채의 실재성과 적정성을 확인할 수 없는 경우, 이 지침에서 부실자산이나 겸업자산으로 분류하는 경우 및 실질자본에서 차감하여야 하는 경우는 진단대상사업 실질자본에서 제외한다.","i":[]}]},"8":{"t":"진단불능","p":[{"m":"①","h":"①진단자는 다음 각 호의 사유에 해당하는 경우에는 진단불능으로 처리하고, 진단을 받는 자 및 진단자가 소속된 협회에 통보한다. 다만, 제1호부터 제3호까지의 사유에 따라 진단불능으로 처리된 경우는 다른 진단자로부터 별도의 진단을 받을 수 없다.","i":["1. 제6조제1항 및 제2항에 따른 자료의 제출과 제시를 하지 않은 경우","2. 진단에 필요한 입증서류와 보완요구를 거부‧기피‧태만히 하는 경우","3. 진단받는 자가 작성‧제출한 서류중 실질자본에 중대한 영향을 미치는 허위가 발견된 경우","4. 신설법인이 법인설립등기일이후 20일 이내의 날을 진단일로 하여 기업진단을 의뢰하는 경우"]},{"m":"②","h":"② 진단자는 진단을 받는 자에 대한 장부의 작성 및 재무제표 작성업무를 수행한 경우(수행하는 경우를 포함한다)에는 해당 회계연도에 대한 재무관리상태 진단을 행할 수 없으며 또한 다음 각호의 1에 해당하는 자에 대한 재무관리상태 진단을 행할 수 없다.","i":["1. 진단자 또는 진단자의 배우자가 임원이거나 이에 준하는 직위(재무에 관한 사무의 책임있는 담당자를 포함한다)에 있거나, 과거 1년 이내에 이러한 직위에 있었던 자(회사를 포함한다. 이하 이 항에서 같다)","2. 현재 진단자 또는 진단자의 배우자가 사용인이거나 과거 1년이내에 사용인이었던 자","3. 진단자 또는 진단자의 배우자가 주식 또는 출자지분을 소유하고 있는 자","4. 진단자 또는 진단자의 배우자와 채권 또는 채무관계에 있는 자. 이 경우 진단자를 규율하는 관련 법 등에서 세부적으로 정한 경우에는 해당 규정에 따른다.","5. 진단자에게 무상으로 또는 통상의 거래가격보다 현저히 낮은 대가로 사무실을 제공하고 있는 자","6. 진단자의 고유업무 외의 업무로 인하여 계속적인 보수를 지급하거나 그 밖에 경제상의 특별한 이익을 제공하고 있는 자","7. 진단을 수행하는 대가로 자기 회사의 주식․신주인수권부사채․전환사채 또는 주식매수선택권을 제공하였거나 제공하기로 한 자"]}]},"9":{"t":"진단방법 및 진단의견","p":[{"m":"①","h":"①진단자는 진단을 받는 자가 제출 또는 제시하는 서류를 검토하되, 진단의견 결정에 필요한 경우 분석적 검토․실사․입회․조회․계산검증 등과 같은 전문가적 확인절차를 통하여 진단을 실시하여야 한다.","i":[]},{"m":"②","h":"②진단을 받는 자가 제1항에 따른 진단자의 진단의견 결정에 대하여 이의가 있을 때에는 이를 위해 반증을 제시할 수 있고, 진단자는 제시된 반증을 성실하게 평가한 후 진단의견을 결정하여야 한다.","i":[]},{"m":"③","h":"③진단자는 별지 제1호 서식의 진단의견란에 다음과 같이 기재한다.","i":["1. 진단을 받는 자의 진단대상사업 실질자본이 관련법규에서 정하고 있는 등록기준 자본액 이상인 경우에는 “적격”으로 기재하고, 미달인 경우에는 “부적격”으로 기재한다.","2. 제8조제1항의 규정에 해당하는 경우에는 “진단불능”으로 기재한다."]}]},"10":{"t":"진단보고 및 진단조서의 작성‧비치 등","p":[{"m":"①","h":"①진단을 실시한 진단자는 진단의 결과를 별지 제1호부터 제4호까지의 서식에 따라 작성하고 기 명날인한 후 진단자가 소속된 협회의 확인(전자문서상 결재를 포함한다)을 받아 진단을 받는 자에게 교부한다.","i":[]},{"m":"②","h":"②진단을 실시한 진단자는 진단조서 및 관련 증빙서류(이하 “진단조서 등”이라 한다)를 작성‧비치하여야 하며 이를 5년간 보존하여야 한다.","i":[]},{"m":"③","h":"③국토해양부장관 또는 법 제91조제1항, 제3항제2호의2부터 제2호의4까지 및 같은항 제6호에 따른 위임․위탁을 받은 자(이하 “위임․위탁받은 자”라 한다)는 진단보고서의 적정성을 판단하기 위하여 진단자에게 진단조서 등의 제출을 요구할 수 있고, 진단자는 제출 요청을 받은 날로부터 7일 이내에 진단조서 등을 국토해양부장관 및 위임․위탁받은 자에게 제출하여야 한다.","i":[]}]},"11":{"t":"진단보고서의 감리 요청 등","p":[{"m":"①","h":"①위임․위탁받은 자는 다음 각 호의 어느 하나에 해당하면 한국공인회계사회 또는 세무사회 기업진단감리위원회에 진단보고서의 감리를 요청하여야 한다. 다만, 위임받은 자가 종합건설업 등록에 관하여 감리를 요청하는 경우에는 위탁받은 자를 경유하여야 하며 이 경우 위탁받은 자는 사전 검토를 거쳐 감리요청 여부를 판단하여야 한다.","i":["1. 제10조제3항에 따른 진단조서 등을 제출하지 않는 경우","2. 진단보고서의 신뢰성이 의심되거나 진단의견에 영향을 줄 수 있는 진단오류가 예상되는 경우","3. 감사보고서상 감사의견이 의견거절이거나 부적정의견인 재무제표에 대한 진단보고서가 제출된 경우","4. 외감법에 따라 외부감사대상에 해당하나 외부감사를 받지 아니한 재무제표에 대한 진단보고서가 제출된 경우","5. 진단자가 제8조제2항을 위반하여 업무를 수행한 경우"]},{"m":"②","h":"②위임․위탁받은 자는 감리결과 부실진단으로 확인되고 관계법령에 위배된다고 판단되는 때에는 해당 진단자를 수사기관에 고발하는 등 필요한 조치를 하여야 한다.","i":[]}]},"12":{"t":"자산‧부채 및 자본의 평가","p":[{"m":"①","h":"①진단을 실시함에 있어서 자산, 부채 및 자본의 평가는 진단대상사업의 관련 법규와 이 지침에서 정하는 사항을 제외하고는 기업회계기준에 따른다.","i":[]},{"m":"②","h":"②이 지침에서 규정하는 계정은 진단을 받는 자가 작성한 재무제표 계정과목이나 계정분류에 불구하고 그 실질적 내용에 따라 적용한다.","i":[]},{"m":"③","h":"③진단자는 한국채택국제회계기준을 적용하여 실질자본을 평가하여서는 아니된다. 다만, 진단받는 자가 제6조제2항에 따라 재무제표 대신 감사보고서를 제출한 때에는 예외로 한다.","i":[]}]},"13":{"t":"부실자산 등","p":[{"m":"①","h":"①다음 각 호의 자산은 부실자산으로 처리하여야 한다.","i":["1. 이 지침에서 부실자산으로 분류된 자산","2. 진단을 받는 자가 법적 또는 실질적으로 소유하지 않은 자산","3. 다음 각 목에 해당하는 자산. 다만, 이 지침에 따라 진단대상사업의 실질자산으로 평가된 자산은 제외한다. 가. 무기명식 금융상품 나. 실재하지 않거나 출처가 불분명한 유가증권 다. 가지급금, 대여금 라. 미수금, 미수수익 마. 선급금, 선납세금, 선급비용 바.부도어음, 장기성매출채권, 대손 처리할 자산 사. 무형자산"]},{"m":"②","h":"②다음 각 호의 금액은 진단대상사업 실질자본에서 차감하여야 한다.","i":["1. 제1항 각 호의 부실자산과 임의 상계된 부채에 상당하는 금액","2. 진행기준으로 매출을 계상한 후 세무신고를 통하여 그 일부 또는 전부를 세무상 수입금액에서 제외한 매출채권에 상당하는 금액","3. 발생원가 또는 비용을 누락한 분식결산 금액","4. 자산의 과대평가 등에 따른 가공자산이나 부채를 누락한 부외부채 금액"]}]},"14":{"t":"현금의 평가","p":[{"m":"①","h":"①현금은 전도금과 현금성자산을 포함하며 예금은 제외한다.","i":[]},{"m":"②","h":"②현금은 진단자가 현금실사와 현금출납장 등을 통하여 확인한 금액만 인정한다. 다만, 진단을 받는 자가 제시한 재무제표의 자본총계의 100분의 1을 초과하는 현금은 부실자산으로 본다.","i":[]}]},"15":{"t":"예금의 평가","p":[{"m":"①","h":"①예금은 진단을 받는 자의 명의로 금융기관에 예치한 장․단기 금융상품으로 요구불예금, 정기예금, 정기적금, 증권예탁금 그 밖의 금융상품을 말한다.","i":[]},{"m":"②","h":"②예금은 다음 각 호에 따라 평가한다.","i":["1. 예금은 진단기준일을 포함한 30일 동안의 은행거래실적 평균잔액으로 평가하며, 이 경우 30일 동안의 기산일과 종료일은 전체 예금에 동일하게 적용하여야 한다. 다만, 예금의 평가금액은 진단기준일 현재의 예금 잔액을 초과할 수 없다.","2. 제1호 본문에도 불구하고 신설법인의 경우 은행거래실적 평균잔액의 평가기간은 진단기준일부터 진단일 전일까지로 한다.","3. 진단기준일 현재 보유하던 실질자산을 예금으로 회수하거나 진단기준일 후 실질자산의 취득 또는 실질부채의 상환을 통하여 예금을 인출한 경우에는 이를 가감하여 은행거래실적 평균잔액을 계산할 수 있다."]},{"m":"③","h":"③다음 각 호의 경우는 부실자산으로 처리하여야 하고 제2항에 따른 은행거래실적 평균잔액을 계산할 때에도 이를 제외하여야 한다.","i":["1. 진단기준일 현재 진단을 받는 자 명의의 금융기관 예금잔액증명과 진단기준일을 포함한 60일간의 은행거래실적증명(제2항제2호의 경우에는 진단기준일부터 진단일까지 기간의 은행거래실적증명을 말한다)을 제시하지 못하는 경우. 다만, 은행거래실적증명이 발급되지 않는 금융상품의 경우에는 금융기관으로부터 발급받은 거래사실을 증명하는 다른 서류로 갈음할 수 있다.","2. 예금이 이 지침에서 부실자산이나 겸업자산으로 보는 자산을 회수하는 형식으로 입금된 후 진단기준일을 포함한 60일 이내에 그 일부 또는 전부가 부실자산이나 겸업자산으로 출금된 경우"]},{"m":"④","h":"④질권 설정 등 사용 또는 인출이 제한된 예금은 겸업자산으로 보며, 제2항에 따른 은행거래실적 평균잔액을 계산할 때에도 이를 제외하여야 한다. 이 경우 겸업자산으로 보는 예금과 직접 관련된 차입금 등은 겸업부채로 처리한다.","i":[]},{"m":"⑤","h":"⑤진단을 받는 자는 진단기준일 현재 예금이 예치되거나 차입금이 있는 금융기관별로 금융거래확인서를 발급받거나 전체 금융기관에 대한 신용정보조회서를 발급받아 진단자에게 제출하고 진단자는 부외부채 유무를 검토하여야 한다.","i":[]}]},"16":{"t":"유가증권의 평가","p":[{"m":"①","h":"①유가증권은 보유기간 또는 보유목적에 따라 단기매매증권, 매도가능증권, 만기보유증권 및 지분법적용투자주식으로 구분되는 지분증권과 채무증권으로 구분된다.","i":[]},{"m":"②","h":"②다음 각 호를 제외한 유가증권은 겸업자산으로 본다.","i":["1. 특정 건설사업의 수행을 위하여 계약상 취득하는 특수 목적 법인의 지분증권","2. 진단대상사업과 관련된 공제조합 출자금","3. 한국금융투자협회 회원사로부터 발급받은 잔고증명서를 제출한 유가증권"]},{"m":"③","h":"③제2항의 유가증권은 다음 각 호에 따라 평가한다.","i":["1. 제2항제1호의 지분증권은 계약서, 출자확인서, 금융자료 등으로 확인한 취득원가로 평가한다.","2. 제2항제2호 및 제3호의 출자금 및 유가증권은 진단기준일 현재의 시가로 평가한다.","3. 제2항제3호의 유가증권이 진단기준일 현재 사용 또는 인출이 제한된 때에는 겸업자산으로 보며, 이 경우 겸업자산으로 보는 유가증권과 직접 관련된 차입금 등도 겸업부채로 처리한다.","4. 제2항제3호의 유가증권이 진단기준일 이후 매도되어 예입된 매매대금이 입금 후 60일 이내에 그 일부 또는 전부가 부실자산이나 겸업자산으로 출금 또는 유지된 경우에는 부실자산으로 본다."]}]},"17":{"t":"매출채권과 미수금등의 평가","p":[{"m":"①","h":"①매출채권은 공사미수금과 분양미수금으로 구분되고, 거래상대방에게 세무자료에 의하여 청구한 것과 진행기준에 의하여 계상한 것을 포함하며 대손충당금을 차감하여 평가한다. 다만, 진단대상사업과 무관한 매출채권은 겸업자산으로 본다.","i":[]},{"m":"②","h":"②세무자료에 의하여 청구한 매출채권은 계약서, 세금계산서․계산서의 청구와 금융자료에 의한 회수내역을 통하여 검토하며 필요한 경우에는 채권조회를 실시하여 확인하여야 한다.","i":[]},{"m":"③","h":"③진행기준에 의하여 계산한 매출채권은 제2항에 따른 계약서 등을 통한 평가에 추가하여 진행률의 산정이 적정한지를 평가하여야 한다.","i":[]},{"m":"④","h":"④다음 각 호를 제외하고 발생일로부터 2년 이상을 경과한 매출채권과 미수금 등 받을채권(이하 “받을채권”이라 한다)은 부실자산으로 본다.","i":["1. 국가, 지방자치단체 또는 공공기관에 대한 받을채권. 이 경우 제25조에 따른 관련 부채를 차감하여 평가하여야 한다.","2. 법원의 판결 등에 의하여 금액이 확정되었거나 소송이 진행 중인 받을채권. 이 경우 다음 각 목에 따라 평가하여야 한다. 가. 채권 회수를 위한 담보의 제공이 없는 경우에는 전액 부실자산으로 본다. 나. 채권 회수를 위한 담보의 제공이 있는 경우에는 그 제공된 담보물을 통하여 회수가능한 금액을 초과하는 금액을 부실자산으로 본다."]},{"m":"⑤","h":"⑤매출채권을 건물(부속토지 포함)로 회수한 경우, 그 건물은 취득한 날부터 2년간 실질자산으로 본다.","i":[]},{"m":"⑥","h":"⑥국가와 지방자치단체에 대한 조세 채권(조세불복청구 중에 있는 금액을 포함한다)은 부실자산으로 본다. 다만, 진단일 현재 환급 결정된 경우는 제외한다.","i":[]}]},"18":{"t":"재고자산의 평가","p":[{"m":"①","h":"①재고자산은 취득원가로 평가하되 시가가 취득원가보다 하락한 경우에는 시가에 의한다. 이 경우 「부동산가격공시 및 감정평가에 관한 법률」에 의한 감정평가법인이 감정한 가액이 있는 경우 그 가액을 시가로 본다.","i":[]},{"m":"②","h":"②원자재 및 이와 유사한 재고자산은 부실자산으로 본다. 다만, 보유기간이 취득일로부터 1년 이내인 재고자산으로서 그 종류, 취득일자, 취득사유, 금융자료, 현장일지, 실사 등에 의하여 진단기준일 현재 진단대상사업을 위하여 보유하고 있음을 확인한 경우에는 실질자산으로 본다.","i":[]},{"m":"③","h":"③조경공사업이나 조경식재공사업을 위한 수목자산과 주택, 상가, 오피스텔 등 진단대상사업과 연관이 있고 판매를 위한 신축용 자산(시공한 경우에 한함)의 재고자산은 보유기간에 관계없이 제2항 단서에 따라 확인한 경우에는 실질자산으로 본다.","i":[]},{"m":"④","h":"④진단대상사업에 직접 관련이 없는 재고자산과 부동산매매업을 위한 재고자산은 겸업자산으로 본다.","i":[]}]},"19":{"t":"대여금 등의 평가","p":[{"m":"①","h":"①「법인세법」상 특수관계자에 대한 가지급금 및 대여금은 부실자산으로 보며, 특수관계자가 아닌 자에 대한 대여금은 겸업자산으로 본다.","i":[]},{"m":"②","h":"②종업원에 대한 주택자금과 우리사주조합에 대한 대여금은 계약서, 금융자료, 주택취득 현황, 조합 결산서 등을 통하여 실재성이 확인되고 진단을 받는 자의 재무상태와 사회통념에 비추어 대여금액의 규모가 합리적인 경우에 한하여 실질자산으로 인정할 수 있다.","i":[]}]},"20":{"t":"선급금 등의 평가","p":[{"m":"","h":"선급금이 발생한 당시의 계약서 및 금융자료 등 증빙자료와 진단일 현재 계약이행 여부 및 진행 상황을 검토하여 실재성을 확인한 경우 다음 각 호의 선급금은 실질자산으로 본다.","i":["1. 계약서상 선급금 규정에 의한 선급금 중 기성금으로 정산되지 않은 금액","2. 진단대상사업을 위하여 입고 예정인 재료의 구입대금으로 선지급한 금액","3. 주택건설용지를 취득하기 위하여 선지급한 금액. 다만, 제23조제4항에 따라 실질자산에 해당하지 않는 금액은 제외한다.","4. 기업회계기준에 따라 선급공사원가로 대체될 예정인 선급금"]}]},"21":{"t":"보증금의 평가","p":[{"m":"①","h":"①임차보증금은 임대차계약서, 금융자료, 확정일자, 임대인의 세무신고서 및 시가자료 등에 의하여 평가하며, 다음 각 호의 경우에는 부실자산으로 본다.","i":["1. 거래의 실재성이 없다고 인정되는 경우","2. 임차목적물이 부동산이 아닌 경우. 다만, 리스사업자와 리스계약에 의한 리스보증금은 제외한다.","3. 임차부동산이 본점, 지점 또는 사업장 소재지 및 그 인접한 지역이 아닌 경우 또는 임직원용 주택인 경우","4. 임차보증금이 시가보다 과다하여 그 시가를 초과한 금액의 경우"]},{"m":"②","h":"②진단대상사업을 수행하면서 예치한 보증금은 그 근거가 되는 계약서, 금융자료, 진단기준일 현재 보증기관의 보관증 및 보증금 납부 후 진단일까지 진단대상사업의 진행상황 등을 종합적으로 판단하여 실재성을 확인한다. 다만, 보증기간이 만료된 경우로서 보증금의 회수가 지체되는 때에는 회수가능금액으로 평가하고, 보증금과 관련한 소송이 계속 중인 경우에는 보증금의 범위에서 소송금액 총액을 차감하여 평가한다.","i":[]},{"m":"③","h":"③법원에 예치한 공탁금은 진단일 현재의 소송 결과 등을 반영한 회수가능금액으로 평가한다.","i":[]},{"m":"④","h":"④진단대상사업에 직접 제공되지 않는 임차보증금은 겸업자산으로 본다.","i":[]}]},"22":{"t":"투자자산 등의 평가","p":[{"m":"","h":"이 지침에서 따로 정하지 아니한 투자자산과 기타의 비유동자산은 겸업자산으로 본다.","i":[]}]},"23":{"t":"유형자산의 평가","p":[{"m":"①","h":"①유형자산은 토지, 건물, 건설중인자산 및 그 밖의 유형자산을 포함한다.","i":[]},{"m":"②","h":"②유형자산은 소유권, 자산의 실재성 및 진단대상사업에 대한 관련성을 종합하여 평가하며, 등기 또는 등록대상인 자산으로서 법적 및 실질적 소유권이 없는 경우에는 부실자산으로 본다.","i":[]},{"m":"③","h":"③유형자산은 기업회계기준에 따라 취득원가모형이나 재평가모형 중에서 진단을 받는 자가 회계장부에 반영한 방식으로 평가한다. 이 경우 감가상각누계액은 취득일부터 진단기준일까지의 감가상각비로 「법인세법」에 따른 기준내용연수와 정액법으로 계산한 금액으로 한다. 다만, 진단을 받는 자의 회계장부상 감가상각누계액이 클 경우에는 그 금액으로 한다.","i":[]},{"m":"④","h":"④건설중인자산은 계약서, 금융자료, 회계장부 등으로 확인한다. 다만, 실재하지 않는 계약인 경우, 진단일 현재 계약일로부터 1년이 초과되었으나 그 사유를 객관적으로 소명하지 못하는 경우, 진단일까지 계약이 해제된 경우로서 불입금액이 예금으로 환입된 후 그 일부 또는 전부가 부실자산이나 겸업자산으로 출금되거나 유지되는 경우는 부실자산으로 본다.","i":[]},{"m":"⑤","h":"⑤진단자는 토지와 건물의 등기부등본을 통하여 부외부채에 대한 평가를 하여야 한다.","i":[]},{"m":"⑥","h":"⑥임대자산이나 운휴자산 등 진단대상사업과 관련이 없는 유형자산은 겸업자산으로 보며, 토지 또는 건물의 일부가 임대자산인 경우에는 전체 연면적에 대한 임대면적의 비율로 계산한 금액을 겸업자산으로 본다. 다만, 진단을 받는 자가 소유한 본사의 업무용 건축물(부속토지 포함)이 임대자산인 경우에는 실질자산으로 보며, 해당 임대자산에 대하여 진단을 받는 자 또는 타인 명의의 부채(담보로 제공된 경우 채권최고액)는 실질부채로 본다.","i":[]}]},"24":{"t":"무형자산의 평가","p":[{"m":"","h":"무형자산은 부실자산으로 본다. 다만, 진단대상사업과 직접 관련하여 취득한 다음 각 호의 경우는 예외로 한다.","i":["1. 시설물을 기부채납하고 일정기간 무상으로 사용수익할 수 있는 권리를 보유한 경우에는 정액법에 따른 상각액을 차감하여 평가한다.","2. 산업재산권은 취득원가에 정액법에 따른 상각액을 차감하여 평가한다.","3. 부동산물권은 제21조제1항 및 제23조제2항에 준하여 평가한다."]}]},"25":{"t":"부채의 평가","p":[{"m":"①","h":"①부채는 그 발생사유를 공사원가, 비용의 발생 및 관련 자산의 규모 등과 비교 분석하여 그 적정성 및 부외부채의 유무를 평가하여야 한다.","i":[]},{"m":"②","h":"②부외부채는 다음 각 호에 따라 평가한다.","i":["1. 진단을 받는 자는 진단기준일 현재 예금이 예치되거나 차입금이 있는 금융기관별로 금융거래확인서를 발급받거나 전체 금융기관에 대한 신용정보조회서를 발급받아 진단자에게 제출하고 진단자는 부외부채 유무를 검토하여야 한다.","2. 제15조제3항에 따른 은행거래실적증명과 같은 기간 동안 지급한 부채내역을 제출받아 진단기준일 현재 부외부채 유무를 확인한다.","3. 진단기준일 현재 과세기간이 종료한 세무신고에 대하여 진단일까지 과세관청에 신고한 세무신고서를 제출받아 미지급세금 등을 확인한다."]},{"m":"③","h":"③충당부채는 다음 각 호에 따라 적정성 여부를 평가한다.","i":["1. 퇴직급여충당부채는 기업회계기준에 따라 평가한다.","2. 진단을 받는 자가 하자보수충당부채와 공사손실충당부채를 장부에 계상한 경우에는 그 금액으로 평가한다.","3. 보증채무와 관련한 충당부채는 기업회계기준에 따라 평가한다."]}]},"26":{"t":"자본의 평가","p":[{"m":"①","h":"①납입자본금은 법인등기사항으로 등기된 자본금으로 한다.","i":[]},{"m":"②","h":"②적법한 세무신고 없이 장부상 이익잉여금 등 자본을 증액한 경우에는 실질자본에서 직접 차감한다.","i":[]}]},"27":{"t":"수익과 비용의 평가","p":[{"m":"","h":"수익과 비용은 기업회계기준에 따라 평가한다.","i":[]}]},"28":{"t":"겸업자본의 평가","p":[{"m":"①","h":"①건설업체가 진단대상사업과 겸업사업을 경영하는 경우에는 다음 각 호의 순으로 겸업자본을 평가하여야 한다.","i":["1. 이 지침에서 겸업자산으로 열거한 자산은 겸업자산으로 하고, 그 겸업자산과 직접 관련된 부채는 겸업부채로 한다.","2. 제1호의 겸업자산과 겸업부채를 제외한 자산과 부채는 다음 각 목의 순에 따라 구분한다. 가. 진단대상사업과 겸업사업을 상시 구분 경리하여 실지귀속이 분명한 경우에는 실지귀속에 따라 겸업자산과 겸업부채를 구분한다. 나. 가목에 따라 겸업자산과 겸업부채로 구분할 수 없는 공통자산과 공통부채는 겸업비율에 의하여 구분한다. 이 경우 겸업비율은 진단기준일이 속한 회계연도의 각 사업별 수입금액 비율로 한다. 다만, 하나 또는 그 이상의 사업에서 수입금액이 없어 수입금액 비율을 산정할 수 없는 경우에는 사용면적, 종업원 수 등 합리적인 방식으로 산정한 겸업비율에 의한다."]},{"m":"②","h":"②관련법규 등에서 기준자본액이 정하여진 겸업사업에 대하여 제1항에 따라 계산한 겸업자본이 그 기준자본액에 미달하는 경우에는 기준자본액을 겸업자본으로 본다.","i":[]}]},"29":{"t":"겸업사업자의 신규등록 신청시 실질자본의 평가","p":[{"m":"①","h":"①겸업사업을 영위하는 자가 건설업종을 신규등록 신청하는 경우에는 다음 각 호에 따라 진단대상업종의 납입자본액을 보유하여야 한다.","i":["1. 회사가 등록기준 자본액을 유상 또는 무상 증자한 경우. 다만, 증자일 현재 완전 자본잠식 상태인 경우에는 제외한다.","2. 회사가 등록기준 자본액 이상의 자본금을 보유하고, 주주총회 또는 이사회 결의를 통하여 동액 이상의 이익잉여금을 진단대상업종을 위해 유보하고 있는 경우"]},{"m":"②","h":"②진단대상업종의 실질자본은 제1항에 따른 증자액 또는 이익잉여금 유보액을 별도의 예금으로 예치하여야 하고 그 예금은 제15조에 따라 평가한다.","i":[]}]}};
+function citedMap(r){
+  const src=[r.art].concat(r.sec.flatMap(x=>x.items)).join(' \n ');
+  const map={};
+  const re=/§(\d+)/g; let m;
+  while((m=re.exec(src))){
+    const n=+m[1]; if(!ART[n]) continue;
+    (map[n]=map[n]||new Set());
+    const run=(src.slice(m.index+m[0].length).match(/^[①-⑩][^\s,;)]*(?:·[①-⑩][^\s,;)]*)*/)||[''])[0];
+    (run.match(/[①-⑩]/g)||[]).forEach(c=>map[n].add(c));
+  }
+  return map;
+}
+function artHTML(n,cited){
+  const a=ART[n];
+  return `<div class="oa"><div class="oa-h">제${n}조(${esc(a.t)})</div>${a.p.map(p=>
+    `<p class="op${p.m&&cited.has(p.m)?' cit':''}">${esc(p.h)}</p>${p.i.length?`<ul class="oi">${p.i.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}`).join('')}</div>`;
+}
+function origHTML(r){
+  const map=citedMap(r), nums=Object.keys(map).map(Number).sort((a,b)=>a-b);
+  if(!nums.length) return '';
+  const chips=nums.map(n=>`<button class="ochip" data-oart="${n}" aria-pressed="${state.oopen.has(n)}">제${n}조</button>`).join('');
+  const open=nums.filter(n=>state.oopen.has(n)).map(n=>artHTML(n,map[n])).join('');
+  return `<div class="orig"><h3>원문 보기 <small>이 계정이 인용한 조문 · 파란 줄 = 인용된 항</small></h3><div class="oc">${chips}</div>${open}
+    <p class="onote">※ 별지 2 원문 텍스트 기준 (공백 정리, 항·호 줄바꿈 자동 처리). 구 명칭(국토해양부장관 등)이 남아 있으며 현행 고시와의 일치 여부는 미확인입니다.</p></div>`;
+}
+
+/* ===================== 서류 체크리스트 ===================== */
+const DOC_COMMON=[
+  ['재무제표 (진단기준일이 연차결산일이면 관할 세무서장에게 제출한 정기 연차결산 재무제표)','§6①'],
+  ['공사원가명세서','§6①'],
+  ['회계장부','§6①'],
+  ['감사보고서 — 외부감사 대상 법인 또는 K-IFRS로 재무제표를 작성한 법인(해당 시, 재무제표 대신 제출)','§6②'],
+  ['기본서류 (계정명세서·계약서·금융자료·세금계산서·계산서·정규영수증·등기·등록서류 등)','§7①1가']
+];
+const FIN_CONF='금융기관별 금융거래확인서 또는 전체 금융기관 신용정보조회서';
+const DOC_ACCTS=[
+  {g:'자산',id:'cash',t:'현금·전도금',docs:[['현금실사 결과 · 현금출납장','§14②']]},
+  {g:'자산',id:'deposit',t:'예금',docs:[['진단기준일 현재 예금잔액증명서','§7②3, §15③1'],['진단기준일 포함 60일간 은행거래실적증명 (발급 불가 상품은 거래사실 증명서로 갈음)','§15③1'],[FIN_CONF,'§15⑤, §25②1']]},
+  {g:'자산',id:'sec',t:'유가증권',docs:[['한국금융투자협회 회원사 발급 잔고증명서','§16②3, §7②7'],['특수목적법인 지분증권: 계약서 · 출자확인서 · 금융자료','§16③1']]},
+  {g:'자산',id:'recv',t:'매출채권',docs:[['거래처원장','§7②4'],['금융자료 회수내역 (세무자료 청구분)','§17②'],['진행률 산정 근거 자료 (진행기준분)','§17③'],['채권조회 회신 (필요 시)','§17②']]},
+  {g:'자산',id:'loan',t:'대여금 (종업원 주택자금 등)',docs:[['종업원 주택자금·우리사주조합 대여금: 계약서 · 금융자료 · 주택취득 현황 · 조합 결산서','§19②']]},
+  {g:'자산',id:'miscrecv',t:'미수금 · 장기성매출채권',docs:[['제공받은 담보의 가치와 회수가능성을 입증하는 서류','§7②6']]},
+  {g:'자산',id:'prepay',t:'선급금',docs:[['선급금 계약서 · 금융자료 및 진단일 현재 이행·진행 상황 자료','§20']]},
+  {g:'자산',id:'prepaidtax',t:'선납세금',docs:[['환급통보 내역을 입증하는 서류','§7②6']]},
+  {g:'자산',id:'invmat',t:'원자재 · 수목',docs:[['거래명세서','§7②5'],['현장일지','§7②5, §18②']]},
+  {g:'자산',id:'invhouse',t:'판매용 신축 재고 (용지·주택)',docs:[['공사원가명세서','§7②5'],['분양내역서','§7②5']]},
+  {g:'자산',id:'invwip',t:'미성공사',docs:[['공사원가명세서','§7②5']]},
+  {g:'자산',id:'tangible',t:'유형자산 (토지·건물 등)',docs:[['감가상각명세서','§7②8'],['토지·건물 등기부등본','§23⑤'],['담보대출 · 임대보증금 유무 확인 자료','§7②8']]},
+  {g:'자산',id:'cip',t:'건설중인자산',docs:[['건설중인자산 계약서 · 금융자료 · 회계장부','§23④']]},
+  {g:'자산',id:'intang',t:'무형자산',docs:[['산업재산권: 인허가기관의 확인서','§7②11'],['사용수익기부자산: 수증자의 확인서 · 세무신고 자료','§7②11']]},
+  {g:'자산',id:'guar',t:'보증금',docs:[['임차보증금: 임대차계약서 · 확정일자 · 임대인의 세무신고 자료 · 시가 조회자료','§7②9, §21①'],['그 밖의 보증금: 보증기관의 확인서 또는 보관증','§7②9, §21②']]},
+  {g:'부채',id:'liab',t:'부채 (부외부채 확인 포함)',docs:[['계정명세서 (부채)','§7①2'],[FIN_CONF,'§7①2, §25②1'],['공제조합 등 보증가능금액확인서 발급기관의 융자확인서','§7①2'],['은행거래실적증명 기간(60일)과 같은 기간 동안 지급한 부채내역','§25②2'],['과세기간 종료 세무신고에 대해 진단일까지 신고한 세무신고서 (미지급세금 등)','§25②3']]}
+];
+const dst={sel:new Set(),got:new Set(),list:[]};
+function docList(){
+  const m=new Map();
+  const add=(name,ref,tag)=>{ if(!m.has(name)) m.set(name,{name,refs:new Set(),tags:[]}); const o=m.get(name); ref.split(/,\s*/).forEach(x=>o.refs.add(x)); if(!o.tags.includes(tag)) o.tags.push(tag); };
+  DOC_COMMON.forEach(([n,r])=>add(n,r,'공통'));
+  DOC_ACCTS.filter(a=>dst.sel.has(a.id)).forEach(a=>a.docs.forEach(([n,r])=>add(n,r,a.t)));
+  return [...m.values()];
+}
+function docText(){
+  const L=dst.list, need=L.filter(x=>!dst.got.has(x.name)), got=L.filter(x=>dst.got.has(x.name));
+  const c=$('#dClient').value.trim()||'(거래처명)', d=$('#dDate').value||'(기준일)';
+  let s='[건설업 기업진단 입증서류 요청]\n거래처: '+c+'\n진단기준일: '+d+'\n\n';
+  s+= need.length ? '■ 제출 요청 서류 ('+need.length+'건)\n'+need.map((x,i)=>(i+1)+'. '+x.name).join('\n') : '■ 요청할 서류가 없습니다.';
+  if(got.length) s+='\n\n■ 수령 완료 ('+got.length+'건)\n'+got.map(x=>'- '+x.name).join('\n');
+  s+='\n\n※ 진단 과정에서 진단자가 필요하다고 판단하는 보완서류를 추가로 요청할 수 있습니다.\n더나은세무법인 덕수지점 · 김태현 세무사';
+  return s;
+}
+function renderDocs(){
+  dst.list=docList();
+  $('#dList').innerHTML = dst.list.map((x,i)=>`<label class="dl${dst.got.has(x.name)?' on':''}"><input type="checkbox" data-di="${i}"${dst.got.has(x.name)?' checked':''}><span><span class="dn">${esc(x.name)}</span><span class="dm">${x.tags.map(g=>`<span class="dtag${g==='공통'?' c':''}">${esc(g)}</span>`).join('')}<span class="dref">${esc([...x.refs].join(' · '))}</span></span></span></label>`).join('')
+    + (dst.sel.size?'':'<div class="dd-empty">왼쪽에서 진단할 계정을 체크하면 계정별 서류가 추가됩니다.</div>');
+  const done=dst.list.filter(x=>dst.got.has(x.name)).length, tot=dst.list.length;
+  $('#dProg').textContent='수령 '+done+' / '+tot;
+  $('#dBar').style.width=(tot?done/tot*100:0)+'%';
+  $('#dText').value=docText();
+}
+function renderAcc(){
+  let out='', g='';
+  DOC_ACCTS.forEach(a=>{ if(a.g!==g){ g=a.g; out+=`<div class="dd-grp">${g}</div>`; }
+    out+=`<label><input type="checkbox" data-da="${a.id}"${dst.sel.has(a.id)?' checked':''}>${esc(a.t)}</label>`; });
+  $('#dAcc').innerHTML=out;
+}
+function openDocs(){ renderAcc(); renderDocs(); $('#dMsg').textContent=''; $('#docdlg').showModal(); }
+$('#docBtn').addEventListener('click',openDocs);
+$('#dClose').addEventListener('click',()=>$('#docdlg').close());
+$('#docdlg').addEventListener('click',e=>{ if(e.target===$('#docdlg')) $('#docdlg').close(); });
+$('#dAcc').addEventListener('change',e=>{ const a=e.target.dataset.da; if(!a) return; e.target.checked?dst.sel.add(a):dst.sel.delete(a); renderDocs(); });
+$('#dList').addEventListener('change',e=>{ const i=e.target.dataset.di; if(i==null) return; const n=dst.list[+i].name; e.target.checked?dst.got.add(n):dst.got.delete(n); renderDocs(); });
+$('#dAll').addEventListener('click',()=>{ DOC_ACCTS.forEach(a=>dst.sel.add(a.id)); renderAcc(); renderDocs(); });
+$('#dNone').addEventListener('click',()=>{ dst.sel.clear(); renderAcc(); renderDocs(); });
+$('#dClient').addEventListener('input',()=>{ $('#dText').value=docText(); });
+$('#dDate').addEventListener('input',()=>{ $('#dText').value=docText(); });
+$('#dCopy').addEventListener('click',async()=>{
+  const txt=docText(); let ok=false;
+  try{ await navigator.clipboard.writeText(txt); ok=true; }catch(_){}
+  if(!ok){ const ta=$('#dText'); ta.value=txt; ta.closest('details').open=true; ta.select(); try{ ok=document.execCommand('copy'); }catch(_){} }
+  $('#dMsg').textContent = ok ? '복사했습니다. 카톡·메일에 붙여넣으세요.' : '복사에 실패했습니다. 아래 미리보기 내용을 직접 복사하세요.';
+});
+
+
+/* ===================== 판정 질문지 ===================== */
+TAGCLS['제외']='none'; TAGCLS['요검토']='none';
+const QMAP={cash:'cash',deposit:'deposit',sec:'sec',recv:'recv',suspense:'loan',loan:'loan',prepay:'prepay',prepaidtax:'prepaidtax',
+  invmat:'inv',invtree:'inv',invhouse:'inv',invwip:'inv',tangible:'tangible',cip:'cip',intang:'intang',guar:'guar'};
+
+/* n: 질문(q, ref, o=[[답, 다음질문|@결과]]) / r: 결과(tags, title, text, ref, extra) */
+const QS={
+cash:{t:'현금 · 전도금',row:'cash',start:'a',
+ n:{
+  a:{q:'현금(전도금 포함, 예금 제외)을 현금실사·현금출납장 등으로 확인한 금액입니까?',ref:'§14',o:[['예, 확인했다','b'],['아니오, 확인하지 못했다','@x']]},
+  b:{q:'해당 현금이 회사(진단을 받는 자)가 제시한 재무제표 자본총계의 100분의 1을 초과합니까?',ref:'§14②, §7②2',o:[['초과한다','@dead'],['초과하지 않는다','@real']]}},
+ r:{
+  x:{tags:['제외'],title:'인정하지 않음',text:'현금은 현금실사·현금출납장 등으로 확인한 금액만 인정합니다.',ref:'§14②',extra:['실재성·적정성을 확인할 수 없는 자산은 진단대상사업 실질자본에서 제외 (§7④)']},
+  dead:{tags:['부실'],title:'초과 현금은 부실자산',text:'회사가 제시한 자본총계의 100분의 1을 초과하는 현금은 부실자산으로 봅니다.',ref:'§14②, §7②2',extra:['문언은 “100분의 1을 초과하는 현금”이라고만 규정 — 초과분만인지는 원문 확인']},
+  real:{tags:['실질'],title:'실질자산으로 인정',text:'확인된 현금이며 자본총계의 100분의 1 이하입니다.',ref:'§14②'}}},
+
+deposit:{t:'예금',row:'deposit',start:'a',
+ n:{
+  a:{q:'진단을 받는 자 명의로 금융기관에 예치한 장·단기 금융상품(요구불, 정기예금, 정기적금, 증권예탁금 등)입니까?',ref:'§15①',o:[['예','b'],['아니오 (타인 명의 등)','@own']]},
+  b:{q:'기준일 현재 예금잔액증명서와 기준일 포함 60일간의 은행거래실적증명(발급 불가 상품은 거래사실 증명서)을 제시했습니까?',ref:'§15③1, §7②3',o:[['제시했다','c'],['제시하지 못했다','@noproof']]},
+  c:{q:'허위의 예금이거나 일시적으로 조달된 예금으로 확인됩니까?',ref:'§7②3',o:[['예','@fake'],['아니오','d']]},
+  d:{q:'부실·겸업자산을 회수하는 형식으로 입금된 후, 기준일 포함 60일 이내에 그 일부 또는 전부가 부실·겸업자산으로 출금됐습니까?',ref:'§15③2',o:[['예','@out'],['아니오','e']]},
+  e:{q:'질권 설정 등으로 사용·인출이 제한된 예금입니까?',ref:'§15④',o:[['예','@lim'],['아니오','@ok']]}},
+ r:{
+  own:{tags:['부실'],title:'부실자산 (소유하지 않은 자산)',text:'진단을 받는 자가 법적 또는 실질적으로 소유하지 않은 자산은 부실자산입니다. 예금은 진단을 받는 자 명의로 예치한 금융상품으로 정의됩니다.',ref:'§13①2, §15①'},
+  noproof:{tags:['부실'],title:'부실자산',text:'예금잔액증명과 60일 거래실적증명을 제시하지 못하면 부실자산이며 평균잔액 계산에서도 제외합니다.',ref:'§15③1'},
+  fake:{tags:['부실'],title:'부실자산',text:'허위의 예금이나 일시적으로 조달된 예금으로 확인된 경우는 부실자산입니다.',ref:'§7②3'},
+  out:{tags:['부실'],title:'부실자산 (해당 입출금분)',text:'부실·겸업자산을 회수하는 형식으로 입금된 후 60일 이내에 부실·겸업자산으로 출금된 경우는 부실자산이며 평균잔액 계산에서도 제외합니다.',ref:'§15③2'},
+  lim:{tags:['겸업'],title:'겸업자산',text:'질권 설정 등 사용·인출이 제한된 예금은 겸업자산이며 평균잔액 계산에서 제외합니다. 직접 관련된 차입금은 겸업부채입니다.',ref:'§15④'},
+  ok:{tags:['실질'],title:'실질자산 — 30일 평균잔액으로 평가',text:'기준일 포함 30일 동안의 은행거래실적 평균잔액으로 평가하되 기준일 현재 잔액을 초과할 수 없습니다.',ref:'§15②1',extra:['신설법인은 평가기간을 기준일부터 진단일 전일까지로 (§15②2)','기준일 현재 예금·차입금이 있는 금융기관별 금융거래확인서 또는 전체 금융기관 신용정보조회서로 부외부채 검토 (§15⑤)','상단 「계산기」의 “예금 30일 평균잔액” 탭에서 평가액을 계산할 수 있습니다']}}},
+
+sec:{t:'유가증권',row:'sec',start:'a',
+ n:{
+  a:{q:'무기명식 금융상품이거나, 실재하지 않거나 출처가 불분명한 유가증권입니까?',ref:'§13①3 가·나',o:[['예','@dead0'],['아니오','b']]},
+  b:{q:'어떤 유가증권입니까?',ref:'§16②',o:[['특정 건설사업 수행을 위해 계약상 취득한 특수목적법인 지분증권','@spc'],['진단대상사업과 관련된 공제조합 출자금','@coop'],['한국금융투자협회 회원사 발급 잔고증명서를 제출한 유가증권','c'],['비상장 주식','@unl'],['그 밖의 유가증권','@other']]},
+  c:{q:'사용·인출이 제한된 유가증권입니까?',ref:'§16③3',o:[['제한된다','@lim'],['제한 없음','d']]},
+  d:{q:'기준일 이후 매도되어 입금된 후 60일 이내에 부실·겸업자산으로 출금되거나 유지됩니까?',ref:'§16③4',o:[['예','@dead1'],['아니오','@bal']]}},
+ r:{
+  dead0:{tags:['부실'],title:'부실자산',text:'무기명식 금융상품, 실재하지 않거나 출처가 불분명한 유가증권은 부실자산입니다.',ref:'§13①3 가·나, §7②1'},
+  spc:{tags:['실질'],title:'실질자산 — 취득원가로 평가',text:'특정 건설사업 수행을 위해 계약상 취득한 특수목적법인 지분증권은 취득원가(계약서·출자확인서·금융자료)로 평가합니다.',ref:'§16②1, §16③1'},
+  coop:{tags:['실질'],title:'실질자산 — 기준일 현재 시가',text:'진단대상사업과 관련된 공제조합 출자금은 기준일 현재 시가로 평가합니다.',ref:'§16②2, §16③2'},
+  lim:{tags:['겸업'],title:'겸업자산',text:'잔고증명서를 제출한 유가증권이 사용·인출 제한이면 겸업자산이며, 직접 관련된 차입금은 겸업부채입니다.',ref:'§16③3'},
+  dead1:{tags:['부실'],title:'부실자산',text:'기준일 이후 매도되어 입금된 후 60일 이내에 부실·겸업자산으로 출금되거나 유지되면 부실자산입니다.',ref:'§16③4'},
+  bal:{tags:['실질'],title:'실질자산 — 기준일 현재 시가',text:'잔고증명서를 제출한 유가증권은 기준일 현재 시가로 평가합니다.',ref:'§16②3, §16③2',extra:['잔고증명서와 사실이 다르거나 시가를 초과하는 금액은 부실자산 (§7②7)']},
+  unl:{tags:['겸업'],title:'겸업자산',text:'비상장 주식은 겸업자산으로 분류합니다.',ref:'§7②1, §16②'},
+  other:{tags:['겸업'],title:'겸업자산',text:'§16②의 3유형을 제외한 유가증권은 겸업자산입니다.',ref:'§16②'}}},
+
+recv:{t:'매출채권',row:'recv',start:'a',
+ n:{
+  a:{q:'진단대상사업과 관련된 매출채권(공사미수금·분양미수금)입니까?',ref:'§17①',o:[['예','b'],['아니오 (진단대상사업과 무관)','@biz']]},
+  b:{q:'계약서, 세금계산서·계산서, 금융자료 회수내역, 거래처원장 등으로 실재성과 적정성이 확인됩니까?',ref:'§17②, §7②4',o:[['확인된다','c'],['확인할 수 없다','@x']]},
+  c:{q:'발생일로부터 2년 이상 경과했습니까?',ref:'§17④',o:[['2년 미만','@ok'],['2년 이상 경과','d']]},
+  d:{q:'다음 중 어디에 해당합니까?',ref:'§17④',o:[['국가·지방자치단체·공공기관에 대한 채권','@pub'],['법원 판결 등으로 금액이 확정됐거나 소송이 진행 중인 채권','e'],['해당 없음','@old']]},
+  e:{q:'그 채권에 담보가 있습니까?',ref:'§17④2',o:[['담보 있음','@sec'],['담보 없음','@nosec']]}},
+ r:{
+  biz:{tags:['겸업'],title:'겸업자산',text:'진단대상사업과 무관한 매출채권은 겸업자산입니다.',ref:'§17①'},
+  x:{tags:['제외'],title:'인정하지 않음',text:'실재성·적정성을 확인할 수 없는 자산은 진단대상사업 실질자본에서 제외합니다.',ref:'§7②4, §7④'},
+  ok:{tags:['실질'],title:'실질자산 (대손충당금 차감)',text:'공사미수금과 분양미수금에서 대손충당금을 차감한 금액으로 평가합니다.',ref:'§17①',extra:['진행기준분은 진행률 산정의 적정성도 평가 (§17③)','진행기준으로 매출을 계상한 후 세무신고로 세무상 수입금액에서 제외한 매출채권 상당액은 진단대상사업 실질자본에서 차감 (§13②2)']},
+  pub:{tags:['실질'],title:'2년 경과해도 인정',text:'국가·지방자치단체·공공기관에 대한 채권은 2년 이상 경과해도 부실자산으로 보지 않습니다. 관련 부채는 §25에 따라 차감 평가합니다.',ref:'§17④1'},
+  sec:{tags:['실질','부실'],title:'담보로 회수가능한 금액까지 인정, 초과분은 부실',text:'판결 확정·소송 진행 중 채권에 담보가 있으면 담보로 회수가능한 금액을 초과하는 부분이 부실자산입니다.',ref:'§17④2나'},
+  nosec:{tags:['부실'],title:'전액 부실자산',text:'판결 확정·소송 진행 중 채권이라도 담보가 없으면 전액 부실자산입니다.',ref:'§17④2가'},
+  old:{tags:['부실'],title:'부실자산',text:'발생일로부터 2년 이상 경과한 매출채권·미수금 등 받을채권은 부실자산입니다.',ref:'§17④'}}},
+
+loan:{t:'대여금 · 가지급금',row:'loan',start:'a',
+ n:{
+  a:{q:'종업원 주택자금 또는 우리사주조합에 대한 대여금입니까?',ref:'§19②',o:[['예','b'],['아니오','c']]},
+  b:{q:'계약서·금융자료·주택취득 현황·조합 결산서 등으로 실재성이 확인되고, 재무상태·사회통념상 규모가 합리적입니까?',ref:'§19②, §7②6',o:[['예','@emp'],['아니오','c']]},
+  c:{q:'상대방이 법인세법상 특수관계자입니까?',ref:'§19①',o:[['특수관계자이다','@rel'],['특수관계자가 아니다','d']]},
+  d:{q:'계정이 대여금입니까, 가지급금입니까?',ref:'§19①, §13①3다',o:[['대여금','@biz'],['가지급금','@susp']]}},
+ r:{
+  emp:{tags:['실질'],title:'실질자산으로 인정 가능',text:'종업원 주택자금·우리사주조합 대여금은 실재성이 확인되고 규모가 합리적이면 실질자산으로 인정할 수 있습니다.',ref:'§19②, §7②6'},
+  rel:{tags:['부실'],title:'부실자산',text:'법인세법상 특수관계자에 대한 가지급금·대여금은 부실자산입니다.',ref:'§19①, §13①3다'},
+  biz:{tags:['겸업'],title:'겸업자산',text:'특수관계자가 아닌 자에 대한 대여금은 겸업자산입니다.',ref:'§19①'},
+  susp:{tags:['부실','요검토'],title:'부실자산 가능성 — 지침에 명시 없음',text:'§13①3다는 가지급금·대여금을 부실자산으로 열거하고, §19①은 특수관계자가 아닌 자에 대한 “대여금”만 겸업자산으로 규정합니다. 비특수관계자 가지급금의 처리는 지침에 명시되어 있지 않아 §13①3다 적용 여부를 검토해야 합니다.',ref:'§13①3다, §19①'}}},
+
+prepay:{t:'선급금 · 선급공사원가',row:'prepay',start:'a',
+ n:{
+  a:{q:'계약서·금융자료와 진단일 현재 이행·진행 상황으로 선급금의 실재성이 확인됩니까?',ref:'§20',o:[['확인된다','b'],['확인할 수 없다','@dead']]},
+  b:{q:'다음 중 어디에 해당합니까?',ref:'§20',o:[['계약서상 선급금 규정에 의한 선급금 중 기성금 미정산분','@ok'],['진단대상사업을 위해 입고 예정인 재료 구입대금 선지급분','@ok'],['주택건설용지 취득 선지급분','c'],['기업회계기준상 선급공사원가로 대체될 예정인 선급금','@ok'],['위에 해당하지 않는다','@dead']]},
+  c:{q:'그 금액이 §23④(건설중인자산 부실 사유)에 따라 실질자산이 아닌 금액에 해당합니까?',ref:'§20 3호 단서, §23④',o:[['해당한다','@dead'],['해당하지 않는다','@ok']]}},
+ r:{
+  ok:{tags:['실질'],title:'실질자산으로 인정',text:'§20의 4가지 유형에 해당하고 실재성이 확인되어 실질자산으로 봅니다.',ref:'§20'},
+  dead:{tags:['부실'],title:'부실자산',text:'선급금은 부실자산입니다. §20의 4가지 유형으로 실재성이 확인된 경우에만 실질자산으로 인정됩니다.',ref:'§13①3마, §7②1, §20'}}},
+
+prepaidtax:{t:'선납세금 · 조세채권',row:'prepaidtax',start:'a',
+ n:{
+  a:{q:'어떤 계정입니까?',ref:'',o:[['선납세금','b'],['국가·지방자치단체에 대한 조세채권 (환급세액 등, 조세불복 중 포함)','c'],['부가세선급금','@vat']]},
+  b:{q:'환급통보 내역을 입증하는 서류가 있습니까?',ref:'§7②6',o:[['있다','@real'],['없다','@dead']]},
+  c:{q:'진단일 현재 환급이 결정됐습니까?',ref:'§17⑥',o:[['환급 결정됨','@refund'],['환급 결정 전 (불복 중 포함)','@dead2']]}},
+ r:{
+  real:{tags:['실질'],title:'실질자산으로 인정',text:'선납세금은 환급통보 내역을 입증하는 서류로 확인되어 실재성이 입증되면 실질자산입니다.',ref:'§7②6'},
+  dead:{tags:['부실'],title:'부실자산',text:'선급금·선납세금·선급비용은 부실자산입니다.',ref:'§13①3마'},
+  refund:{tags:['실질'],title:'부실자산에서 제외',text:'국가·지방자치단체에 대한 조세채권은 부실자산이지만, 진단일 현재 환급 결정된 경우는 제외합니다.',ref:'§17⑥'},
+  dead2:{tags:['부실'],title:'부실자산',text:'국가·지방자치단체에 대한 조세채권(조세불복청구 중 포함)은 부실자산입니다.',ref:'§17⑥'},
+  vat:{tags:['요검토'],title:'지침에 별도 규정 없음',text:'부가세선급금은 지침에 별도 규정이 없습니다. 선납세금(§13①3마, §7②6)·국가에 대한 조세채권(§17⑥) 규정의 적용 여부를 검토해야 합니다.',ref:'§13①3마, §17⑥'}}},
+
+inv:{t:'재고자산',row:'invmat',start:'a',
+ n:{
+  a:{q:'진단대상사업과 직접 관련이 없는 재고자산이거나 부동산매매업 재고자산입니까?',ref:'§18④',o:[['예','@biz'],['아니오','b']]},
+  b:{q:'재고자산의 종류는 무엇입니까?',ref:'§18, §7②5',o:[['원자재 및 유사 재고 (원재료·가설재 등)','c'],['수목 (조경공사업·조경식재공사업)','d'],['주택·상가·오피스텔 등 판매 목적 신축용 자산','e'],['단기공사현장 미성공사','g'],['그 밖의 재고자산','@dead']]},
+  c:{q:'보유기간이 취득일로부터 1년 이내이고, 종류·취득일자·취득사유·금융자료·현장일지·실사로 진단대상사업을 위해 보유함이 확인됩니까?',ref:'§18②',o:[['예','@real1'],['아니오','@dead']]},
+  d:{q:'수목자산이며, 종류·취득일자·취득사유·금융자료·현장일지·실사 등 §18②단서 방식으로 확인됩니까? (보유기간 불문)',ref:'§18③',o:[['예','@real2'],['아니오','@dead']]},
+  e:{q:'직접 시공한 신축용 자산입니까? (시공한 경우에 한함)',ref:'§18③',o:[['시공했다','f'],['시공하지 않았다','@nosi']]},
+  f:{q:'§18②단서 방식으로 확인되고, 기본서류·공사원가명세서·분양내역서 등으로 실재성이 인정됩니까?',ref:'§18③, §7②5',o:[['예','@real3'],['아니오','@dead']]},
+  g:{q:'기본서류·공사원가명세서로 미성공사의 실재성이 인정됩니까?',ref:'§7②5',o:[['예','@real4'],['아니오','@dead']]}},
+ r:{
+  biz:{tags:['겸업'],title:'겸업자산',text:'진단대상사업과 직접 관련이 없는 재고자산과 부동산매매업 재고자산은 겸업자산입니다.',ref:'§18④'},
+  dead:{tags:['부실'],title:'부실자산',text:'재고자산은 부실자산으로 분류하되, 이 지침에서 실질자산으로 인정한 경우만 예외입니다.',ref:'§7②1, §18②'},
+  real1:{tags:['실질'],title:'실질자산 (원자재·유사 재고)',text:'취득일로부터 1년 이내이고 진단대상사업을 위해 보유함이 확인되어 실질자산입니다.',ref:'§18②',extra:['평가: 취득원가, 시가 하락 시 시가. 감정평가법인 감정가액이 있으면 시가로 봄 (§18①)']},
+  real2:{tags:['실질'],title:'실질자산 (수목)',text:'조경공사업·조경식재공사업의 수목자산은 보유기간에 관계없이 §18②단서 방식으로 확인하면 실질자산입니다.',ref:'§18③',extra:['평가: 취득원가, 시가 하락 시 시가 (§18①)']},
+  real3:{tags:['실질'],title:'실질자산 (판매용 신축 재고)',text:'진단대상사업과 연관되고 판매를 위해 시공한 신축용 자산은 보유기간에 관계없이 확인되면 실질자산입니다.',ref:'§18③, §7②5',extra:['평가: 취득원가, 시가 하락 시 시가 (§18①)']},
+  real4:{tags:['실질'],title:'실질자산 (미성공사)',text:'단기공사현장의 미성공사는 기본서류·공사원가명세서로 실재성이 인정되면 실질자산입니다.',ref:'§7②5'},
+  nosi:{tags:['부실','겸업'],title:'시공하지 않은 판매용 부동산',text:'판매 목적 신축용 자산은 “시공한 경우에 한해” 보유기간 불문 실질자산으로 인정됩니다. 그에 해당하지 않으면 재고자산은 부실자산(§7②1)이고, 부동산매매업 재고자산이면 겸업자산(§18④)입니다.',ref:'§18③·④, §7②1'}}},
+
+tangible:{t:'유형자산 (토지·건물 등)',row:'tangible',start:'a',
+ n:{
+  a:{q:'진단을 받는 자가 법적·실질적 소유권을 가진 자산입니까? (등기·등록 대상 자산 포함)',ref:'§23②, §13①2',o:[['소유권이 있다','b'],['소유권이 없다','@own']]},
+  b:{q:'매출채권을 건물(부속토지 포함)로 회수해 취득한 자산입니까?',ref:'§17⑤',o:[['예','@recvb'],['아니오','c']]},
+  c:{q:'전부 또는 일부가 임대 중이거나 운휴 중이거나, 진단대상사업과 관련이 없습니까?',ref:'§23⑥',o:[['예','d'],['아니오','@ok']]},
+  d:{q:'본사 업무용 건축물(부속토지 포함)이 임대 중인 경우입니까?',ref:'§23⑥ 단서',o:[['예','@hq'],['아니오','e']]},
+  e:{q:'토지·건물의 일부만 임대·운휴이고 나머지는 진단대상사업에 쓰입니까?',ref:'§23⑥',o:[['일부만 해당','@part'],['전부 해당','@biz']]}},
+ r:{
+  own:{tags:['부실'],title:'부실자산',text:'등기·등록대상 자산으로서 법적·실질적 소유권이 없으면 부실자산입니다.',ref:'§23②, §13①2'},
+  recvb:{tags:['실질'],title:'취득일부터 2년간 실질자산',text:'매출채권을 건물(부속토지 포함)로 회수한 경우 그 건물은 취득한 날부터 2년간 실질자산으로 봅니다.',ref:'§17⑤',extra:['2년 경과 후의 처리는 지침에 명시 없음 — 일반 규정(진단대상사업 관련성 등)으로 판단']},
+  ok:{tags:['실질'],title:'실질자산',text:'소유권·실재성·진단대상사업 관련성이 확인되면 실질자산입니다.',ref:'§23②',extra:['감가상각누계액은 취득일~기준일 법인세법 기준내용연수·정액법 금액, 장부상 누계액이 더 크면 그 금액 (§23③)','토지·건물 등기부등본으로 부외부채 평가 (§23⑤)','담보대출·임대보증금 유무 확인 (§7②8)']},
+  hq:{tags:['실질'],title:'실질자산 (본사 업무용 임대건물)',text:'본사 업무용 건축물(부속토지 포함)이 임대자산인 경우에는 실질자산으로 봅니다.',ref:'§23⑥ 단서',extra:['그 임대자산에 대한 본인 또는 타인 명의 부채(담보 제공 시 채권최고액)는 실질부채 (§23⑥ 단서)']},
+  part:{tags:['겸업','실질'],title:'임대면적 비율만큼 겸업자산',text:'토지 또는 건물의 일부가 임대자산이면 전체 연면적에 대한 임대면적의 비율로 계산한 금액을 겸업자산으로 봅니다. 나머지는 진단대상사업 자산입니다.',ref:'§23⑥'},
+  biz:{tags:['겸업'],title:'겸업자산',text:'임대자산이나 운휴자산 등 진단대상사업과 관련이 없는 유형자산은 겸업자산입니다.',ref:'§23⑥, §7②1'}}},
+
+cip:{t:'건설중인자산',row:'cip',start:'a',
+ n:{
+  a:{q:'계약서·금융자료·회계장부로 확인되는 실재하는 계약입니까?',ref:'§23④',o:[['예','b'],['아니오 (실재하지 않는 계약)','@dead']]},
+  b:{q:'진단일 현재 계약일로부터 1년이 초과됐고 그 사유를 객관적으로 소명하지 못합니까?',ref:'§23④',o:[['예','@dead'],['아니오','c']]},
+  c:{q:'진단일까지 계약이 해제되어 불입금액이 예금으로 환입된 후, 그 일부 또는 전부가 부실·겸업자산으로 출금되거나 유지됩니까?',ref:'§23④',o:[['예','@dead'],['아니오','@ok']]}},
+ r:{
+  ok:{tags:['실질'],title:'실질자산',text:'계약서·금융자료·회계장부로 확인되며 부실 사유(§23④)에 해당하지 않습니다.',ref:'§23④'},
+  dead:{tags:['부실'],title:'부실자산',text:'실재하지 않는 계약, 계약일로부터 1년 초과 + 소명 불가, 해제 후 환입금의 부실·겸업자산 출금·유지 중 하나에 해당합니다.',ref:'§23④'}}},
+
+intang:{t:'무형자산',row:'intang',start:'a',
+ n:{
+  a:{q:'진단대상사업과 직접 관련하여 취득한 무형자산입니까?',ref:'§24',o:[['예','b'],['아니오','@dead']]},
+  b:{q:'어떤 무형자산입니까?',ref:'§24',o:[['시설물 기부채납 후 일정기간 무상 사용수익권','@use'],['산업재산권','@ip'],['부동산물권','@re'],['그 밖의 무형자산','@dead']]}},
+ r:{
+  dead:{tags:['부실'],title:'부실자산',text:'무형자산은 부실자산입니다. 진단대상사업과 직접 관련하여 취득한 3유형만 예외입니다.',ref:'§24, §13①3사'},
+  use:{tags:['실질'],title:'실질자산 — 정액법 상각 차감',text:'시설물 기부채납 후 일정기간 무상 사용수익권은 정액법으로 상각한 금액을 차감해 평가합니다.',ref:'§24 1호',extra:['증빙: 기본서류, 수증자의 확인서와 세무신고 자료 (§7②11)']},
+  ip:{tags:['실질'],title:'실질자산 — 취득원가에서 정액법 상각 차감',text:'산업재산권은 취득원가에서 정액법으로 상각한 금액을 차감해 평가합니다.',ref:'§24 2호',extra:['증빙: 기본서류와 인허가기관의 확인서 (§7②11)']},
+  re:{tags:['실질'],title:'§21①·§23②에 준하여 평가',text:'부동산물권은 임차보증금(§21①)과 유형자산(§23②)의 평가에 준합니다.',ref:'§24 3호, §21①, §23②',extra:['증빙은 임차보증금에 준해 확인 (§7②10)']}}},
+
+guar:{t:'보증금',row:'guar',start:'a',
+ n:{
+  a:{q:'어떤 보증금입니까?',ref:'§21',o:[['임차보증금','b'],['진단대상사업 수행 중 예치한 보증금','h'],['법원 공탁금','@dep']]},
+  b:{q:'거래의 실재성이 임대차계약서·금융자료·확정일자 등으로 확인됩니까?',ref:'§21①1',o:[['확인된다','c'],['실재성이 없다','@dead1']]},
+  c:{q:'임차목적물은 무엇입니까?',ref:'§21①2',o:[['부동산','d'],['리스사업자와의 리스보증금','d'],['부동산이 아닌 그 밖의 것','@dead2']]},
+  d:{q:'임차부동산이 본점·지점·사업장 소재지 및 인접지역이 아니거나, 임직원용 주택입니까?',ref:'§21①3',o:[['예','@dead3'],['아니오','e']]},
+  e:{q:'보증금이 시가를 초과합니까?',ref:'§21①4',o:[['시가를 초과한다','f'],['초과하지 않는다','f2']]},
+  f:{q:'진단대상사업에 직접 제공되는 임차보증금입니까?',ref:'§21④',o:[['예','@over'],['아니오','@biz']]},
+  f2:{q:'진단대상사업에 직접 제공되는 임차보증금입니까?',ref:'§21④',o:[['예','@real'],['아니오','@biz']]},
+  h:{q:'계약서·금융자료·보증기관 보관증·진행상황으로 종합 확인됩니까?',ref:'§21②, §7②9',o:[['확인된다','h2'],['확인할 수 없다','@x']]},
+  h2:{q:'보증기간이 만료됐는데 회수가 지체되고 있습니까?',ref:'§21②',o:[['회수 지체 중','@delay'],['아니오','@real2']]}},
+ r:{
+  dead1:{tags:['부실'],title:'부실자산',text:'거래의 실재성이 없는 임차보증금은 부실자산입니다.',ref:'§21①1'},
+  dead2:{tags:['부실'],title:'부실자산',text:'임차목적물이 부동산이 아닌 경우는 부실자산입니다(리스사업자와의 리스보증금 제외).',ref:'§21①2'},
+  dead3:{tags:['부실'],title:'부실자산',text:'임차부동산이 본점·지점·사업장 소재지 및 인접지역이 아니거나 임직원용 주택이면 부실자산입니다.',ref:'§21①3'},
+  over:{tags:['실질','부실'],title:'시가 초과분은 부실자산',text:'시가를 초과하는 부분은 부실자산이며, 나머지 금액이 진단대상사업 임차보증금으로 평가됩니다.',ref:'§21①4',extra:['시세는 임대인 세무신고 자료·시가 조회자료로 평가 (§7②9)']},
+  real:{tags:['실질'],title:'실질자산',text:'실재성이 확인되고 부실 사유에 해당하지 않으며 진단대상사업에 직접 제공된 임차보증금입니다.',ref:'§21①, §21④',extra:['임대인의 세무신고 자료, 시가 조회자료로 평가 (§7②9)']},
+  biz:{tags:['겸업'],title:'겸업자산',text:'진단대상사업에 직접 제공되지 않는 임차보증금은 겸업자산입니다.',ref:'§21④'},
+  x:{tags:['제외'],title:'인정하지 않음',text:'실재성·적정성을 확인할 수 없는 자산은 진단대상사업 실질자본에서 제외합니다.',ref:'§7②9, §7④'},
+  delay:{tags:['실질','부실'],title:'회수가능금액만 인정',text:'보증기간 만료 후 회수가 지체되면 회수가능금액으로 평가하고, 소송이 계속 중이면 소송금액 총액을 차감합니다.',ref:'§21②'},
+  real2:{tags:['실질'],title:'실질자산',text:'진단대상사업 수행 중 예치한 보증금으로, 종합 판단상 확인됩니다.',ref:'§21②'},
+  dep:{tags:['실질'],title:'회수가능금액으로 평가',text:'법원 공탁금은 진단일 현재 소송 결과 등을 반영한 회수가능금액으로 평가합니다.',ref:'§21③'}}}
+};
+
+function quizBtn(r){ return QMAP[r.id] ? `<button class="qopen" data-quiz="${QMAP[r.id]}">이 계정 판정 질문지 열기 →</button>` : ''; }
+const qz={id:null,path:[],cur:null,res:null};
+function refChips(ref){ return (ref||'').split(/,\s*/).filter(Boolean).map(x=>`<span class="ref">${esc(x)}</span>`).join(''); }
+function resHTML(R,Q){
+  return `<div class="qz-res"><div class="qz-tags">${R.tags.map((t,i)=>tag(t,i===0)).join('')}</div>
+    <div class="qz-rt">${esc(R.title)}</div><p>${esc(R.text)}</p><div class="qz-ref">${refChips(R.ref)}</div>
+    ${R.extra?`<div class="qz-extra"><b>함께 확인할 것</b><ul>${R.extra.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}
+    <div class="qz-btns"><button class="ibtn" data-qreset>처음부터</button><button class="ibtn" data-qback="${qz.path.length-1}">한 단계 뒤로</button><button class="ibtn pri2" data-qcard="${Q.row}">이 계정 카드 보기</button></div></div>`;
+}
+function renderQz(){
+  $('#qzXlsx').disabled=!qz.id;
+  $('#qzXlsx').title=qz.id?'':'왼쪽에서 계정을 선택하세요';
+  $('#qzSide').innerHTML=Object.keys(QS).map(k=>`<button class="qz-acc${k===qz.id?' on':''}" data-qacc="${k}">${esc(QS[k].t)}</button>`).join('');
+  const m=$('#qzMain');
+  if(!qz.id){ m.innerHTML='<div class="qz-empty">왼쪽에서 판정할 계정을 고르세요.<br>질문에 답하면 실질·부실·겸업 분류와 근거 조문이 나옵니다.</div>'; return; }
+  const Q=QS[qz.id];
+  const steps=qz.path.map((p,i)=>{ const n=Q.n[p.node]; return `<button class="qz-step" data-qback="${i}"><b>Q</b>${esc(n.q)}<i>→ ${esc(n.o[p.opt][0])}</i></button>`; }).join('');
+  let cur;
+  if(qz.res){ cur=resHTML(Q.r[qz.res],Q); }
+  else{
+    const n=Q.n[qz.cur];
+    cur=`<div class="qz-q"><div class="qz-qt">${esc(n.q)}</div>${n.ref?`<div class="qz-ref">${refChips(n.ref)}</div>`:''}<div class="qz-opts">${n.o.map((o,i)=>`<button class="qz-opt" data-qopt="${i}">${esc(o[0])}</button>`).join('')}</div></div>`;
+  }
+  m.innerHTML=`<h3 class="qz-title">${esc(Q.t)}</h3>${steps?`<div class="qz-steps">${steps}</div>`:''}${cur}`;
+}
+function qzStart(id){ qz.id=id; qz.path=[]; qz.cur=id?QS[id].start:null; qz.res=null; renderQz(); }
+function openQuiz(id){ qzStart(id||null); const d=$('#quizdlg'); if(!d.open) d.showModal(); }
+$('#quizBtn').addEventListener('click',()=>openQuiz(qz.id));
+$('#quizdlg').addEventListener('click',e=>{
+  if(e.target===$('#quizdlg')){ $('#quizdlg').close(); return; }
+  const a=e.target.closest('[data-qacc]'); if(a){ qzStart(a.dataset.qacc); return; }
+  const o=e.target.closest('[data-qopt]');
+  if(o){ const Q=QS[qz.id], i=+o.dataset.qopt, tgt=Q.n[qz.cur].o[i][1]; qz.path.push({node:qz.cur,opt:i}); if(tgt[0]==='@'){ qz.res=tgt.slice(1); } else { qz.cur=tgt; } renderQz(); return; }
+  const b=e.target.closest('[data-qback]');
+  if(b){ const i=+b.dataset.qback; if(i<0) return; qz.cur=qz.path[i].node; qz.path=qz.path.slice(0,i); qz.res=null; renderQz(); return; }
+  if(e.target.closest('[data-qreset]')){ qzStart(qz.id); return; }
+  const c=e.target.closest('[data-qcard]'); if(c){ $('#quizdlg').close(); openRow(c.dataset.qcard,true); }
+});
+
+/* ===================== 간이 계산기 ===================== */
+const cnum=id=>{ const v=($('#'+id).value||'').replace(/[,\s원%]/g,''); if(v==='') return null; const n=+v; return isFinite(n)?n:null; };
+const fmt=n=>{ if(n==null||!isFinite(n)) return '—'; const r=Math.round(n); return (r===0?0:r).toLocaleString('ko-KR'); };
+const pct=n=>n==null?'미정':(Math.round(n*10000)/100).toLocaleString('ko-KR')+'%';
+const orow=(l,v,cls,sub)=>`<div class="orow${cls?' '+cls:''}"><span>${l}${sub?`<small>${sub}</small>`:''}</span><b>${v}</b></div>`;
+function calcEq(){
+  const g=id=>cnum(id)||0;
+  const I=g('cA0')+g('cA1')-g('cA2'), II=g('cL0')+g('cL1')-g('cL2');
+  let rate=null, src='';
+  const rp=cnum('cRatio'), ra=g('cRevA'), rb=g('cRevB');
+  if(rp!=null){ rate=rp/100; src='직접 입력'; } else if(ra+rb>0){ rate=rb/(ra+rb); src='수입금액 비율'; }
+  const warn=[];
+  if((g('cCA')!==0||g('cCL')!==0) && rate==null) warn.push('공통 자산·부채가 있으면 겸업비율(수입금액 또는 직접 입력)이 필요합니다. 지금은 0%로 계산했습니다.');
+  const rr=rate==null?0:rate;
+  const ba=g('cBA')+g('cCA')*rr, bl=g('cBL')+g('cCL')*rr;
+  const III=I-ba, IV=II-bl, V0=III-IV, bcap=ba-bl, minC=cnum('cMin');
+  const adj=(minC!=null&&minC>0&&bcap<minC)?(minC-bcap):0;
+  const cut=g('cCut'), V=V0-adj-cut, req=cnum('cReq');
+  let h='';
+  h+=orow('Ⅰ 실질자산',fmt(I),'','(ⅰ)+(ⅱ)−(ⅲ)');
+  h+=orow('Ⅱ 실질부채',fmt(II),'','(ⅳ)+(ⅴ)−(ⅵ)');
+  h+=orow('겸업비율',pct(rate),'sub',rate==null?'수입금액 또는 직접 입력 필요':src);
+  h+=orow('(ⅶ) 겸업자산',fmt(ba),'sub','겸업자산 + 공통 자산 × 겸업비율');
+  h+=orow('(ⅷ) 겸업부채',fmt(bl),'sub','겸업부채 + 공통 부채 × 겸업비율');
+  h+=orow('Ⅲ 진단대상사업 실질자산',fmt(III),'','Ⅰ − (ⅶ)');
+  h+=orow('Ⅳ 진단대상사업 실질부채',fmt(IV),'','Ⅱ − (ⅷ)');
+  h+=orow('겸업자본',fmt(bcap),'sub','(ⅶ) − (ⅷ)');
+  if(adj>0) h+=orow('§28② 기준자본액 보정',fmt(-adj),'sub','겸업자본 '+fmt(bcap)+' &lt; 기준자본액 '+fmt(minC)+' → 기준자본액을 겸업자본으로 봄');
+  if(cut!==0) h+=orow('추가 차감항목',fmt(-cut),'sub','§7③·§13②·§26② 등');
+  h+=orow('Ⅴ 진단대상사업 실질자본',fmt(V),'k','Ⅲ − Ⅳ'+(adj>0?' − 보정':'')+(cut!==0?' − 추가 차감':''));
+  if(req!=null){
+    const ok=V>=req;
+    h+=orow('등록기준 자본액',fmt(req),'sub');
+    h+=`<div class="vbig ${ok?'t-real':'t-dead'}"><span>${ok?'Ⅴ ≥ 등록기준 자본액':'Ⅴ &lt; 등록기준 자본액'}</span><b>${ok?'적격':'부적격'}</b></div>`;
+    h+=orow(ok?'여유액':'부족액',fmt(Math.abs(V-req)),'sub');
+  } else h+='<div class="cl-note" style="margin-top:.6rem">등록기준 자본액을 입력하면 적격·부적격이 표시됩니다.</div>';
+  h+=warn.map(w=>`<div class="cwarn">${esc(w)}</div>`).join('');
+  h+='<div class="cl-note" style="margin-top:.8rem">※ 진단불능 사유(§8①)와 독립성 요건(§8②)은 계산에 반영하지 않습니다. 원 미만은 반올림해 표시합니다.</div>';
+  $('#cOut').innerHTML=h;
+}
+['cA0','cA1','cA2','cL0','cL1','cL2','cRevA','cRevB','cRatio','cBA','cCA','cBL','cCL','cMin','cCut','cReq'].forEach(id=>{
+  const el=$('#'+id);
+  el.addEventListener('input',calcEq);
+  el.addEventListener('blur',()=>{ if(id==='cRatio') return; const n=cnum(id); if(n!=null) el.value=Math.round(n).toLocaleString('ko-KR'); });
+});
+
+/* 예금 30일 평균잔액 */
+let dpSeq=0;
+function addDep(){
+  dpSeq++;
+  $('#dpList').insertAdjacentHTML('beforeend',`<div class="dpc" data-dp>
+    <div class="dpc-h"><label>예금 구분<input type="text" class="nm" placeholder="예: 국민은행 보통예금 ${dpSeq}" autocomplete="off"></label>
+      <label>기준일 현재 잔액<input class="bal" inputmode="numeric" autocomplete="off"></label>
+      <button class="dpc-x" data-dpdel>삭제</button></div>
+    <textarea class="dly" placeholder="기준일을 포함한 30일 동안의 일별 잔액을 한 줄에 하나씩 (엑셀 열 붙여넣기)"></textarea>
+    <div class="dpc-r"></div></div>`);
+  calcDep();
+}
+function calcDep(){
+  let tot=0, any=false;
+  document.querySelectorAll('[data-dp]').forEach(c=>{
+    const bal=(c.querySelector('.bal').value||'').replace(/[,\s원]/g,'');
+    const bn=bal===''?null:+bal;
+    const vals=(c.querySelector('.dly').value||'').split(/[\s,;]+/).map(s=>s.replace(/원/g,'')).filter(s=>s!==''&&isFinite(+s)).map(Number);
+    const n=vals.length, avg=n?vals.reduce((a,b)=>a+b,0)/n:null;
+    let ev=null, note='';
+    if(avg!=null && bn!=null){ ev=Math.min(avg,bn); if(avg>bn) note='평균잔액이 기준일 잔액을 초과 → 기준일 잔액 적용'; }
+    if(n && n!==30) note=(note?note+' · ':'')+'일수 '+n+'일 (30일이 아님 — 신설법인은 기준일~진단일 전일)';
+    if(ev!=null){ tot+=ev; any=true; }
+    c.querySelector('.dpc-r').innerHTML=`<span>일수 <b>${n}</b></span><span>평균잔액 <b>${fmt(avg)}</b></span><span>기준일 잔액 <b>${fmt(bn)}</b></span><span class="ev">평가액 <b>${fmt(ev)}</b></span>${note?`<span style="color:var(--dead);font-weight:700">${esc(note)}</span>`:''}`;
+  });
+  $('#dpTot').innerHTML=`<span>예금 평가액 합계 (§15②1)</span><b>${any?fmt(tot):'—'}</b>`;
+}
+$('#dpAdd').addEventListener('click',addDep);
+$('#dpList').addEventListener('input',calcDep);
+$('#dpList').addEventListener('click',e=>{ if(e.target.closest('[data-dpdel]')){ e.target.closest('[data-dp]').remove(); calcDep(); } });
+addDep(); calcEq();
+
+document.querySelectorAll('[data-ctab]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-ctab]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  document.querySelectorAll('[data-cpane]').forEach(p=>p.hidden=p.dataset.cpane!==b.dataset.ctab);
+}));
+$('#calcBtn').addEventListener('click',()=>$('#calcdlg').showModal());
+document.querySelectorAll('[data-tclose]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
+$('#calcdlg').addEventListener('click',e=>{ if(e.target===$('#calcdlg')) $('#calcdlg').close(); });
+
+
+/* ===================== 엑셀(.xlsx) 생성 · 다운로드 (외부 라이브러리 없음) ===================== */
+const XS={title:1,head:2,body:3,bold:4,real:5,dead:6,biz:7,note:8,sec:9,ctr:10,gray:11};
+const XSTYLES='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
++'<fonts count="6">'
++'<font><sz val="10"/><name val="Malgun Gothic"/></font>'
++'<font><b/><sz val="14"/><color rgb="FF00338D"/><name val="Malgun Gothic"/></font>'
++'<font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Malgun Gothic"/></font>'
++'<font><b/><sz val="10"/><name val="Malgun Gothic"/></font>'
++'<font><i/><sz val="9"/><color rgb="FF667085"/><name val="Malgun Gothic"/></font>'
++'<font><b/><sz val="11"/><color rgb="FF00338D"/><name val="Malgun Gothic"/></font>'
++'</fonts>'
++'<fills count="7"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'
++'<fill><patternFill patternType="solid"><fgColor rgb="FF00338D"/><bgColor indexed="64"/></patternFill></fill>'
++'<fill><patternFill patternType="solid"><fgColor rgb="FFE8EFFF"/><bgColor indexed="64"/></patternFill></fill>'
++'<fill><patternFill patternType="solid"><fgColor rgb="FFFFECEA"/><bgColor indexed="64"/></patternFill></fill>'
++'<fill><patternFill patternType="solid"><fgColor rgb="FFE3F5F2"/><bgColor indexed="64"/></patternFill></fill>'
++'<fill><patternFill patternType="solid"><fgColor rgb="FFF1F3F6"/><bgColor indexed="64"/></patternFill></fill></fills>'
++'<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'
++'<border><left style="thin"><color rgb="FFD0D5DD"/></left><right style="thin"><color rgb="FFD0D5DD"/></right><top style="thin"><color rgb="FFD0D5DD"/></top><bottom style="thin"><color rgb="FFD0D5DD"/></bottom><diagonal/></border></borders>'
++'<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
++'<cellXfs count="12">'
++'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
++'<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>'
++'<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="3" fillId="0" borderId="1" xfId="0" applyFont="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="3" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="3" fillId="5" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="4" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="5" fillId="0" borderId="0" xfId="0" applyFont="1"/>'
++'<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="top" wrapText="1"/></xf>'
++'<xf numFmtId="0" fontId="3" fillId="6" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>'
++'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+
+function xColName(i){ let s=''; i++; while(i>0){ const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); } return s; }
+function xEsc(s){ return String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function xSheetName(n,used){
+  let b=String(n).replace(/[\\\/\?\*\[\]:]/g,' ').trim().slice(0,31)||'Sheet', k=b, i=2;
+  while(used.includes(k)){ const suf=' ('+i+')'; k=b.slice(0,31-suf.length)+suf; i++; }
+  used.push(k); return k;
+}
+/* sh: {name, rows:[[cell...]], cols:[width...], freeze:n, dv:[{sqref,list}], heights:{rowNo:pt}} · cell: 값 | {v,s,f} */
+function xSheetXml(sh,selected){
+  const cols=sh.cols?('<cols>'+sh.cols.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')+'</cols>'):'';
+  let rows='';
+  sh.rows.forEach((r,ri)=>{
+    const rn=ri+1; let cells='';
+    r.forEach((c,ci)=>{
+      const o=(c!==null&&typeof c==='object')?c:{v:c};
+      const ref=xColName(ci)+rn;
+      const st=o.s!=null?(' s="'+(XS[o.s]!=null?XS[o.s]:o.s)+'"'):'';
+      if(o.f) cells+=`<c r="${ref}"${st}><f>${xEsc(o.f)}</f></c>`;
+      else if(typeof o.v==='number') cells+=`<c r="${ref}"${st}><v>${o.v}</v></c>`;
+      else if(o.v===''||o.v==null){ if(st) cells+=`<c r="${ref}"${st}/>`; }
+      else cells+=`<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${xEsc(o.v)}</t></is></c>`;
+    });
+    const ht=sh.heights&&sh.heights[rn]?` ht="${sh.heights[rn]}" customHeight="1"`:'';
+    rows+=`<row r="${rn}"${ht}>${cells}</row>`;
+  });
+  const pane=sh.freeze?`<pane ySplit="${sh.freeze}" topLeftCell="A${sh.freeze+1}" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft"/>`:'';
+  const dv=(sh.dv&&sh.dv.length)?`<dataValidations count="${sh.dv.length}">${sh.dv.map(d=>`<dataValidation type="list" allowBlank="1" showErrorMessage="1" sqref="${d.sqref}"><formula1>"${xEsc(d.list)}"</formula1></dataValidation>`).join('')}</dataValidations>`:'';
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+    +'<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>'
+    +`<sheetViews><sheetView workbookViewId="0" showGridLines="0"${selected?' tabSelected="1"':''}>${pane}</sheetView></sheetViews>`
+    +'<sheetFormatPr defaultRowHeight="15"/>'+cols+'<sheetData>'+rows+'</sheetData>'+dv
+    +'<pageMargins left="0.5" right="0.5" top="0.6" bottom="0.6" header="0.3" footer="0.3"/>'
+    +'<pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>';
+}
+let _crcT=null;
+function xCrc32(b){
+  if(!_crcT){ _crcT=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1); _crcT[n]=c>>>0; } }
+  let c=0xFFFFFFFF; for(let i=0;i<b.length;i++) c=_crcT[(c^b[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0;
+}
+function xZip(files){
+  const enc=new TextEncoder(), chunks=[], central=[]; let off=0;
+  const u16=n=>[n&255,(n>>8)&255], u32=n=>[n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255];
+  files.forEach(f=>{
+    const name=enc.encode(f.name), data=enc.encode(f.text), crc=xCrc32(data);
+    const lh=new Uint8Array([0x50,0x4b,3,4,...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0)]);
+    chunks.push(lh,name,data);
+    central.push(new Uint8Array([0x50,0x4b,1,2,...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(0),...u16(0x21),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(off)]),name);
+    off+=lh.length+name.length+data.length;
+  });
+  let csize=0; central.forEach(c=>csize+=c.length);
+  const end=new Uint8Array([0x50,0x4b,5,6,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(csize),...u32(off),...u16(0)]);
+  const all=[...chunks,...central,end]; let total=0; all.forEach(c=>total+=c.length);
+  const out=new Uint8Array(total); let p=0; all.forEach(c=>{ out.set(c,p); p+=c.length; }); return out;
+}
+function xBuild(sheets){
+  const used=[]; const names=sheets.map(s=>xSheetName(s.name,used));
+  const files=[
+    {name:'[Content_Types].xml',text:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')+'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+    {name:'_rels/.rels',text:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+    {name:'xl/workbook.xml',text:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView activeTab="0"/></bookViews><sheets>'+names.map((n,i)=>`<sheet name="${xEsc(n).replace(/"/g,'&quot;')}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')+'</sheets><calcPr fullCalcOnLoad="1"/></workbook>'},
+    {name:'xl/_rels/workbook.xml.rels',text:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')+`<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:'xl/styles.xml',text:XSTYLES}
+  ];
+  sheets.forEach((s,i)=>files.push({name:`xl/worksheets/sheet${i+1}.xml`,text:xSheetXml(s,i===0)}));
+  return xZip(files);
+}
+function saveXlsx(bytes,name){
+  if(window.__xlsxHook){ window.__xlsxHook(bytes,name); return; }
+  const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },3000);
+}
+const safeFile=s=>String(s||'').replace(/[\\\/:*?"<>|\r\n]/g,'').trim();
+const todayStr=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const OFFICE='더나은세무법인 덕수지점 · Deoksu Tax Firm · 김태현 세무사';
+
+/* ---------- 서류 체크리스트 엑셀 ---------- */
+function dlDocsXlsx(){
+  renderDocs();
+  const L=dst.list, client=$('#dClient').value.trim(), date=$('#dDate').value;
+  const H=6, first=H+1, last=H+L.length;
+  const rows=[
+    [{v:'건설업 기업진단 입증서류 체크리스트',s:'title'}],
+    [{v:'거래처',s:'bold'},{v:client||'',s:'body'}],
+    [{v:'진단기준일',s:'bold'},{v:date||'',s:'body'}],
+    [{v:'작성',s:'bold'},{v:OFFICE,s:'body'}],
+    [{v:'수령 현황',s:'bold'},{f:`COUNTIF(E${first}:E${last},"수령")&" / "&COUNTA(B${first}:B${last})`,s:'body'}],
+    [{v:'번호',s:'head'},{v:'서류명',s:'head'},{v:'관련 계정',s:'head'},{v:'근거 조문',s:'head'},{v:'수령 여부',s:'head'},{v:'수령일',s:'head'},{v:'비고',s:'head'}]
+  ];
+  L.forEach((x,i)=>{
+    const got=dst.got.has(x.name);
+    rows.push([{v:i+1,s:'ctr'},{v:x.name,s:'body'},{v:x.tags.join(', '),s:'body'},{v:[...x.refs].join(' · '),s:'body'},{v:got?'수령':'미수령',s:'ctr'},{v:'',s:'body'},{v:'',s:'body'}]);
+  });
+  rows.push([]);
+  rows.push([{v:'※ 진단자가 필요하다고 판단하는 보완서류를 추가로 요청할 수 있습니다 (§7①1다). 수령 여부 칸은 목록에서 선택할 수 있습니다.',s:'note'}]);
+  const sel=[[{v:'구분',s:'head'},{v:'계정',s:'head'},{v:'선택',s:'head'},{v:'계정별 서류 수',s:'head'}]];
+  DOC_ACCTS.forEach(a=>sel.push([{v:a.g,s:'ctr'},{v:a.t,s:'body'},{v:dst.sel.has(a.id)?'선택':'-',s:'ctr'},{v:a.docs.length,s:'ctr'}]));
+  const book=xBuild([
+    {name:'서류 체크리스트',rows,cols:[7,62,30,22,12,14,28],freeze:H,dv:[{sqref:`E${first}:E${last}`,list:'미수령,수령'}],heights:{1:24}},
+    {name:'선택 계정',rows:sel,cols:[10,34,10,16]}
+  ]);
+  saveXlsx(book,'입증서류체크리스트'+(client?'_'+safeFile(client):'')+(date?'_'+date:'')+'.xlsx');
+}
+
+/* ---------- 판정 질문지 엑셀 ---------- */
+const CIRC=['①','②','③','④','⑤','⑥','⑦','⑧'];
+const TAGSTYLE={실질:'real',부실:'dead',겸업:'biz'};
+function quizFlat(Q){
+  const order=[], seen={}, q=[Q.start]; seen[Q.start]=1;
+  while(q.length){ const id=q.shift(); order.push(id); Q.n[id].o.forEach(o=>{ const t=o[1]; if(t[0]!=='@'&&!seen[t]){ seen[t]=1; q.push(t); } }); }
+  const lab={}; order.forEach((id,i)=>lab[id]='Q'+(i+1));
+  const rl={}, rorder=[];
+  order.forEach(id=>Q.n[id].o.forEach(o=>{ const t=o[1]; if(t[0]==='@'){ const k=t.slice(1); if(!rl[k]){ rorder.push(k); rl[k]='R'+rorder.length; } } }));
+  Object.keys(Q.r).forEach(k=>{ if(!rl[k]){ rorder.push(k); rl[k]='R'+rorder.length; } });
+  return {order,lab,rl,rorder};
+}
+function quizSheet(key){
+  const Q=QS[key], F=quizFlat(Q);
+  const rows=[
+    [{v:'판정 질문지 — '+Q.t,s:'title'}],
+    [{v:'관련 계정 카드: '+(ROWS.find(r=>r.id===Q.row)||{}).name+'  ·  지침 문언을 단순화한 질문입니다. 최종 판단은 원문과 증빙으로 확인하세요.',s:'note'}],
+    [],
+    [{v:'1. 질문 흐름 (질문 → 답변 → 다음 단계)',s:'sec'}],
+    [{v:'번호',s:'head'},{v:'질문',s:'head'},{v:'근거 조문',s:'head'},{v:'답변 선택지',s:'head'},{v:'다음 단계',s:'head'},{v:'결과 분류',s:'head'}]
+  ];
+  F.order.forEach(id=>{
+    const n=Q.n[id];
+    const nextOf=o=>o[1][0]==='@'?('결과 '+F.rl[o[1].slice(1)]+' · '+Q.r[o[1].slice(1)].title):('→ '+F.lab[o[1]]);
+    rows.push([
+      {v:F.lab[id],s:'ctr'},{v:n.q,s:'bold'},{v:n.ref||'',s:'body'},
+      {v:n.o.map((o,i)=>CIRC[i]+' '+o[0]).join('\n'),s:'body'},
+      {v:n.o.map((o,i)=>CIRC[i]+' '+nextOf(o)).join('\n'),s:'body'},
+      {v:n.o.map((o,i)=>CIRC[i]+' '+(o[1][0]==='@'?Q.r[o[1].slice(1)].tags.join('·'):'—')).join('\n'),s:'body'}
+    ]);
+  });
+  rows.push([]);
+  rows.push([{v:'2. 결과 정리',s:'sec'}]);
+  rows.push([{v:'결과',s:'head'},{v:'설명',s:'head'},{v:'근거 조문',s:'head'},{v:'제목',s:'head'},{v:'분류',s:'head'},{v:'함께 확인할 것',s:'head'}]);
+  F.rorder.forEach(k=>{
+    const R=Q.r[k];
+    rows.push([{v:F.rl[k],s:'ctr'},{v:R.text,s:'body'},{v:R.ref||'',s:'body'},{v:R.title,s:'bold'},{v:R.tags.join(' · '),s:TAGSTYLE[R.tags[0]]||'bold'},{v:(R.extra||[]).map(x=>'• '+x).join('\n'),s:'body'}]);
+  });
+  return {name:Q.t,rows,cols:[10,60,20,42,36,44],heights:{1:24}};
+}
+function quizRecordSheet(){
+  const Q=QS[qz.id], client=$('#dClient').value.trim(), date=$('#dDate').value;
+  const rows=[
+    [{v:'판정 기록 — '+Q.t,s:'title'}],
+    [{v:'거래처명',s:'bold'},{v:client||'',s:'body'}],
+    [{v:'진단기준일',s:'bold'},{v:date||'',s:'body'}],
+    [{v:'계정',s:'bold'},{v:Q.t,s:'body'}],
+    [{v:'작성일',s:'bold'},{v:todayStr(),s:'body'}],
+    [{v:'판정자',s:'bold'},{v:OFFICE,s:'body'}],
+    [],
+    [{v:'1. 답변 기록',s:'sec'}],
+    [{v:'순번',s:'head'},{v:'질문',s:'head'},{v:'답변',s:'head'},{v:'근거 조문',s:'head'}]
+  ];
+  if(qz.path.length){
+    qz.path.forEach((p,i)=>{ const n=Q.n[p.node]; rows.push([{v:i+1,s:'ctr'},{v:n.q,s:'body'},{v:n.o[p.opt][0],s:'bold'},{v:n.ref||'',s:'body'}]); });
+  } else {
+    rows.push([{v:'',s:'ctr'},{v:'(화면에서 질문에 답한 뒤 다운로드하면 답변 기록이 채워집니다. 질문 전체는 다음 시트에 있습니다.)',s:'body'},{v:'',s:'body'},{v:'',s:'body'}]);
+  }
+  rows.push([]);
+  rows.push([{v:'2. 결론',s:'sec'}]);
+  rows.push([{v:'분류',s:'head'},{v:'제목 · 설명',s:'head'},{v:'근거 조문',s:'head'},{v:'함께 확인할 것',s:'head'}]);
+  if(qz.res){
+    const R=Q.r[qz.res];
+    rows.push([{v:R.tags.join(' · '),s:TAGSTYLE[R.tags[0]]||'bold'},{v:R.title+'\n'+R.text,s:'body'},{v:R.ref||'',s:'body'},{v:(R.extra||[]).map(x=>'• '+x).join('\n'),s:'body'}]);
+  } else {
+    rows.push([{v:'',s:'body'},{v:'(아직 결론이 없습니다)',s:'body'},{v:'',s:'body'},{v:'',s:'body'}]);
+  }
+  rows.push([]);
+  rows.push([{v:'3. 메모',s:'sec'}]);
+  for(let i=0;i<4;i++) rows.push([{v:'',s:'body'},{v:'',s:'body'},{v:'',s:'body'},{v:'',s:'body'}]);
+  return {name:'판정 기록',rows,cols:[14,64,30,44],heights:{1:24}};
+}
+function dlQuizXlsx(all){
+  if(!all && !qz.id) return;
+  let sheets;
+  if(all){
+    const keys=Object.keys(QS);
+    const idx=[[{v:'판정 질문지 — 전체 계정',s:'title'}],[{v:OFFICE,s:'note'}],[],
+      [{v:'계정',s:'head'},{v:'질문 수',s:'head'},{v:'결과 수',s:'head'},{v:'첫 질문 근거 조문',s:'head'}]];
+    keys.forEach(k=>{ const F=quizFlat(QS[k]); idx.push([{v:QS[k].t,s:'bold'},{v:F.order.length,s:'ctr'},{v:F.rorder.length,s:'ctr'},{v:QS[k].n[QS[k].start].ref||'',s:'body'}]); });
+    sheets=[{name:'안내',rows:idx,cols:[30,10,10,34],heights:{1:24}}].concat(keys.map(quizSheet));
+  } else {
+    sheets=[quizRecordSheet(),quizSheet(qz.id)];
+  }
+  saveXlsx(xBuild(sheets), all?'판정질문지_전체계정.xlsx':'판정질문지_'+safeFile(QS[qz.id].t)+'.xlsx');
+}
+$('#dXlsx').addEventListener('click',dlDocsXlsx);
+$('#qzXlsx').addEventListener('click',()=>dlQuizXlsx(false));
+$('#qzXlsxAll').addEventListener('click',()=>dlQuizXlsx(true));
+
+buildMap(); buildPrint(); applyState(); applyFs();
+addEventListener('resize',()=>{measure();drawLinks();});
+if(window.ResizeObserver) new ResizeObserver(()=>drawLinks()).observe($('#map'));
+</script>
+</body>
+</html>
